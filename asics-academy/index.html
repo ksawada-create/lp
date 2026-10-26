@@ -316,13 +316,6 @@ a{color:#0057A8}a:hover{color:#1B2A6B}
   window.addEventListener("resize",send);
   if(window.ResizeObserver){new ResizeObserver(send).observe(document.body);}
   setTimeout(send,1500);
-  // anchor links: tell parent to scroll
-  document.addEventListener("click",function(e){
-    var a=e.target.closest('a[href^="#"]'); if(!a||window.parent===window) return;
-    var el=document.querySelector(a.getAttribute("href")); if(!el) return;
-    e.preventDefault();
-    parent.postMessage({type:"asics-lp-scroll",top:el.getBoundingClientRect().top+window.scrollY},"*");
-  });
 })();
 </script>
 </body>
