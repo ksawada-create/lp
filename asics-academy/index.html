@@ -14,9 +14,29 @@ body{margin:0;background:#F4F7FB;-webkit-text-size-adjust:100%}
 img{max-width:100%}
 a{color:#0057A8}a:hover{color:#1B2A6B}
 @media (max-width:640px){
- h1{font-size:28px !important}
- h2{font-size:26px !important}
- section > div{padding-top:48px !important;padding-bottom:48px !important}
+ section > div{padding:44px 20px !important}
+ h1.lp-h1{font-size:24px !important;line-height:1.55 !important}
+ h1.lp-h1 br{display:none}
+ h2{font-size:24px !important;line-height:1.45 !important}
+ .lp-nav{align-self:stretch;width:calc(100% + 40px);box-sizing:border-box;min-width:0;flex-wrap:nowrap !important;overflow-x:auto;gap:16px !important;font-size:13px !important;margin:0 -20px;padding:0 20px 2px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+ .lp-nav::-webkit-scrollbar{display:none}
+ .lp-nav a{white-space:nowrap}
+ header > div{padding:12px 20px !important;flex-direction:column;align-items:flex-start !important;gap:8px !important}
+ .lp-btns a,.lp-cta a{flex:1 1 100%;text-align:center}
+ .lp-menu{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:12px !important}
+ .lp-menu > div > div{padding:12px 12px 14px !important}
+ .lp-menu > div > div > div:first-child{font-size:15px !important}
+ .lp-menu > div > div > div:last-child{font-size:12px !important;line-height:1.6}
+ .lp-rally{padding:24px 20px !important;border-radius:16px !important}
+ .lp-rally-h{font-size:22px !important}
+ .lp-rally > div:nth-child(2){gap:8px !important}
+ .lp-rally > div:nth-child(2) > div{padding:10px 14px !important}
+ .lp-rally > div:last-child p{font-size:19px !important}
+ .lp-advice{font-size:16px !important}
+ .lp-shoe{padding:20px !important}
+ .lp-shoe h3{font-size:21px !important}
+ img.lp-coach{aspect-ratio:1/1 !important;object-position:50% 25% !important}
+ p{font-size:15px}
 }
 </style>
 </head>
@@ -26,7 +46,7 @@ a{color:#0057A8}a:hover{color:#1B2A6B}
 <header style="background: #1B2A6B; color: #FFFFFF">
 <div style="max-width: 1120px; margin: 0 auto; padding: 14px 24px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between">
 <div style="font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 900; font-size: 18px; letter-spacing: 0.04em">TENNIS365 特集</div>
-<nav style="display: flex; flex-wrap: wrap; gap: 20px; font-size: 14px">
+<nav class="lp-nav" style="display: flex; flex-wrap: wrap; gap: 20px; font-size: 14px">
 <a href="#lesson" style="color: #FFFFFF; text-decoration: none">レッスン風景</a>
 <a href="#select" style="color: #FFFFFF; text-decoration: none">シューズ選び</a>
 <a href="#shoes" style="color: #FFFFFF; text-decoration: none">シューズ紹介</a>
@@ -42,22 +62,20 @@ a{color:#0057A8}a:hover{color:#1B2A6B}
 
 <section style="background: #0B3C8C; color: #FFFFFF">
 <div style="max-width: 1120px; margin: 0 auto; padding: 64px 24px 72px; display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start">
-<div style="flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+<div style="flex: 3 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
 <div style="display: flex; flex-wrap: wrap; gap: 8px">
 <span style="background: #FFE14D; color: #1B2A6B; font-weight: 700; font-size: 13px; padding: 4px 12px; border-radius: 4px">開催レポート</span>
-<span style="border: 1px solid #FFFFFF; font-size: 13px; padding: 3px 12px; border-radius: 4px">PR</span>
 </div>
 <div style="font-size: 16px; font-weight: 700; color: #DCE6F7">アシックス ジュニアテニスアカデミー</div>
-<h1 style="margin: 0; font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 900; font-size: 40px; line-height: 1.45">「速く走るためのステップではなく、<br>次のボールを打つためのステップ」<br><span style="color: #FFE14D">を支えるのは、アシックスのシューズ。</span></h1>
-<div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px">
+<h1 class="lp-h1" style="margin: 0; font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 900; font-size: 34px; line-height: 1.5; word-break: auto-phrase"><span style="display: inline-block">「速く走るための</span><span style="display: inline-block">ステップではなく、</span><br><span style="display: inline-block">次のボールを打つための</span><span style="display: inline-block">ステップ」</span><br><span style="color: #FFE14D"><span style="display: inline-block">を支えるのは、</span><span style="display: inline-block">アシックスのシューズ。</span></span></h1>
+<div class="lp-btns" style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px">
 <a href="#lesson" style="background: #FFE14D; color: #1B2A6B; font-weight: 700; text-decoration: none; padding: 14px 28px; border-radius: 999px">レッスンの様子を見る</a>
 <a href="#shoes" style="border: 2px solid #FFFFFF; color: #FFFFFF; font-weight: 700; text-decoration: none; padding: 12px 26px; border-radius: 999px">シューズを見る</a>
 </div>
 </div>
-<div style="flex: 1 1 400px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<div style="flex: 2 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
 <p style="margin: 0; font-size: 16px; color: #DCE6F7">2026年10月17日、大阪市のモリタテニスセンター靭で「アシックス ジュニアテニスアカデミー」が開催されました。抽選で選ばれたU-12世代のジュニア20名が、女子テニス日本代表・奈良くるみコーチから直接指導を受けました。</p>
 <p style="margin: 0; font-size: 16px; color: #DCE6F7">テーマは、試合で差を生むフットワーク。そして、その動きを支えるシューズ選び。ジュニアたちは足形測定で自分の足を知り、アシックスの【STABILITY】【SPEED】2タイプのシューズを履き替えながら、レッスンとラリーに取り組みました。</p>
-<p style="margin: 0; font-size: 13px; color: #AFC2E6">[取材後に追記：当日の印象的なエピソード]</p>
 <div style="background: #24367F; border-radius: 16px; padding: 22px 24px; display: flex; flex-direction: column; gap: 10px; font-size: 14px; margin-top: 8px">
 <div style="font-weight: 700; color: #FFE14D">EVENT DATA</div>
 <div style="display: flex; gap: 12px"><span style="flex: 0 0 64px; font-weight: 700">日時</span><span style="color: #DCE6F7">2026年10月17日（土）10:00〜12:00</span></div>
@@ -74,7 +92,7 @@ a{color:#0057A8}a:hover{color:#1B2A6B}
 <div style="max-width: 1120px; margin: 0 auto; padding: 72px 24px; display: flex; flex-direction: column; gap: 40px">
 <div style="display: flex; flex-direction: column; gap: 8px">
 <div style="font-size: 14px; font-weight: 700; color: #0057A8; letter-spacing: 0.1em">LESSON</div>
-<h2 style="margin: 0; font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 900; font-size: 36px; line-height: 1.35">レッスン風景｜奈良コーチが教えたフットワーク</h2>
+<h2 style="margin: 0; word-break: auto-phrase; font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 900; font-size: 36px; line-height: 1.35">レッスン風景｜奈良コーチが教えたフットワーク</h2>
 <p style="margin: 0; color: #4A5370">最初に伝えたキーワードは「Split Step → 1歩目 → 止まる → 打つ」。この流れを、ステップワークからラリーまで段階的に体に染み込ませました。</p>
 </div>
 
@@ -89,7 +107,7 @@ a{color:#0057A8}a:hover{color:#1B2A6B}
 
 <div style="display: flex; flex-direction: column; gap: 16px">
 <h3 style="margin: 0; font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 900; font-size: 24px">4つのメニュー</h3>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px">
+<div class="lp-menu" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px">
 <div style="background: #FFFFFF; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column">
 <img loading="lazy" src="images/step-drill.jpg" alt="奈良コーチのもとで基礎ステップに取り組むジュニア" style="width: 100%; aspect-ratio: 16 / 10; object-fit: cover; display: block">
 <div style="padding: 18px 20px; display: flex; flex-direction: column; gap: 4px"><div style="font-weight: 900; font-size: 18px">基礎ステップ</div><div style="font-size: 14px; color: #4A5370">構え → スプリットステップ → 左右1歩 → 戻る。最初の1歩を意識。</div></div>
@@ -109,11 +127,11 @@ a{color:#0057A8}a:hover{color:#1B2A6B}
 </div>
 </div>
 
-<div style="background: #1B2A6B; color: #FFFFFF; border-radius: 20px; padding: 36px 32px; display: flex; flex-direction: column; gap: 24px">
+<div class="lp-rally" style="background: #1B2A6B; color: #FFFFFF; border-radius: 20px; padding: 36px 32px; display: flex; flex-direction: column; gap: 24px">
 <div style="display: flex; flex-wrap: wrap; gap: 32px; align-items: center">
 <div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
 <div style="font-size: 14px; font-weight: 700; color: #FFE14D; letter-spacing: 0.1em">RALLY</div>
-<h3 style="margin: 0; font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 900; font-size: 28px; line-height: 1.4">内島萌夏選手・柴原瑛菜選手とのラリーで、実戦へ</h3>
+<h3 class="lp-rally-h" style="margin: 0; font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 900; font-size: 28px; line-height: 1.4; word-break: auto-phrase">内島萌夏選手・柴原瑛菜選手とのラリーで、実戦へ</h3>
 <p style="margin: 0; color: #DCE6F7">ドリルで覚えた動きを、ツアーで戦う選手とのラリーで試しました。テーマは段階的に5つ。</p>
 </div>
 <img loading="lazy" src="images/rally-collage.jpg" alt="柴原瑛菜選手、内島萌夏選手、奈良コーチとジュニアのラリーの様子" style="flex: 1 1 420px; min-width: 0; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 12px; display: block">
@@ -137,7 +155,7 @@ a{color:#0057A8}a:hover{color:#1B2A6B}
 <div style="max-width: 1120px; margin: 0 auto; padding: 72px 24px; display: flex; flex-direction: column; gap: 36px">
 <div style="display: flex; flex-direction: column; gap: 8px">
 <div style="font-size: 14px; font-weight: 700; color: #0057A8; letter-spacing: 0.1em">SHOES SELECT</div>
-<h2 style="margin: 0; font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 900; font-size: 36px; line-height: 1.35">シューズ選び｜ラケットと同じように、シューズも選ぶ。</h2>
+<h2 style="margin: 0; word-break: auto-phrase; font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 900; font-size: 36px; line-height: 1.35">シューズ選び｜ラケットと同じように、シューズも選ぶ。</h2>
 <p style="margin: 0; color: #4A5370">レッスンの前に、まずは自分の足を知るところから。測定結果に合ったシューズを履くことで、アシックスシューズの機能性をコートで体感しました。</p>
 </div>
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px">
@@ -159,7 +177,7 @@ a{color:#0057A8}a:hover{color:#1B2A6B}
 </div>
 <div style="background: #F4F7FB; border-radius: 16px; padding: 24px 28px; display: flex; flex-direction: column; gap: 6px">
 <div style="font-size: 13px; font-weight: 700; color: #0057A8">奈良コーチのアドバイス</div>
-<p style="margin: 0; font-size: 18px; font-weight: 700">「自分のプレースタイルにあわせて、ネットへのダッシュならSPEED、左右の安定感ならSTABILITYを選ぶことがポイント」</p>
+<p class="lp-advice" style="margin: 0; font-size: 18px; font-weight: 700; line-height: 1.7">「自分のプレースタイルにあわせて、ネットへのダッシュならSPEED、左右の安定感ならSTABILITYを選ぶことがポイント」</p>
 </div>
 </div>
 </section>
@@ -168,18 +186,18 @@ a{color:#0057A8}a:hover{color:#1B2A6B}
 <div style="max-width: 1120px; margin: 0 auto; padding: 72px 24px; display: flex; flex-direction: column; gap: 36px">
 <div style="display: flex; flex-direction: column; gap: 8px">
 <div style="font-size: 14px; font-weight: 700; color: #0057A8; letter-spacing: 0.1em">SHOES</div>
-<h2 style="margin: 0; font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 900; font-size: 36px; line-height: 1.35">シューズ紹介｜ジュニアが体感した2つのタイプ</h2>
+<h2 style="margin: 0; word-break: auto-phrase; font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 900; font-size: 36px; line-height: 1.35">シューズ紹介｜ジュニアが体感した2つのタイプ</h2>
 <p style="margin: 0; color: #4A5370">2面のコートで履く順番を入れ替え、全員が「左右の動き」と「前後の動き」の両方で、STABILITYとSPEEDを履き比べました。</p>
 </div>
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px">
-<div style="background: #FFFFFF; border: 2px solid #0057A8; border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 16px">
+<div style="background: #FFFFFF; border: 2px solid #0057A8; border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 16px" class="lp-shoe">
 <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center"><span style="background: #0057A8; color: #FFFFFF; font-weight: 700; font-size: 13px; padding: 4px 12px; border-radius: 4px">STABILITY</span><span style="font-weight: 700; color: #0057A8">安定性タイプ</span></div>
 <div style="aspect-ratio: 2 / 1; background: #E3EAF5; border: 2px dashed #9AAFD3; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #4A5370; font-size: 14px">[商品写真]</div>
 <h3 style="margin: 0; font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 900; font-size: 26px">[モデル名]</h3>
 <p style="margin: 0; color: #4A5370">[アシックス提供の機能説明]</p>
 <a href="#" style="align-self: flex-start; background: #0057A8; color: #FFFFFF; font-weight: 700; text-decoration: none; padding: 12px 24px; border-radius: 999px">商品ページを見る</a>
 </div>
-<div style="background: #FFFFFF; border: 2px solid #C24E00; border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 16px">
+<div style="background: #FFFFFF; border: 2px solid #C24E00; border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 16px" class="lp-shoe">
 <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center"><span style="background: #C24E00; color: #FFFFFF; font-weight: 700; font-size: 13px; padding: 4px 12px; border-radius: 4px">SPEED</span><span style="font-weight: 700; color: #C24E00">スピードタイプ</span></div>
 <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
 <img loading="lazy" src="images/speed-1.jpg" alt="アシックス SPEEDタイプのテニスシューズ" style="width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 12px; display: block">
@@ -197,7 +215,7 @@ a{color:#0057A8}a:hover{color:#1B2A6B}
 <div style="max-width: 1120px; margin: 0 auto; padding: 72px 24px; display: flex; flex-direction: column; gap: 32px">
 <div style="display: flex; flex-direction: column; gap: 8px">
 <div style="font-size: 14px; font-weight: 700; color: #0057A8; letter-spacing: 0.1em">MOVIE</div>
-<h2 style="margin: 0; font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 900; font-size: 36px; line-height: 1.35">動画で見る、当日の足元</h2>
+<h2 style="margin: 0; word-break: auto-phrase; font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 900; font-size: 36px; line-height: 1.35">動画で見る、当日の足元</h2>
 </div>
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px">
 <div style="display: flex; flex-direction: column; gap: 10px">
@@ -232,7 +250,7 @@ a{color:#0057A8}a:hover{color:#1B2A6B}
 <div style="max-width: 1120px; margin: 0 auto; padding: 72px 24px; display: flex; flex-direction: column; gap: 32px">
 <div style="display: flex; flex-direction: column; gap: 8px">
 <div style="font-size: 14px; font-weight: 700; color: #0057A8; letter-spacing: 0.1em">VOICE</div>
-<h2 style="margin: 0; font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 900; font-size: 36px; line-height: 1.35">履いて感じた違い｜参加したジュニアの声</h2>
+<h2 style="margin: 0; word-break: auto-phrase; font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 900; font-size: 36px; line-height: 1.35">履いて感じた違い｜参加したジュニアの声</h2>
 </div>
 <div style="display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start">
 <div style="flex: 1 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
@@ -246,7 +264,7 @@ a{color:#0057A8}a:hover{color:#1B2A6B}
 
 <section style="background: #F4F7FB">
 <div style="max-width: 1120px; margin: 0 auto; padding: 72px 24px; display: flex; flex-wrap: wrap; gap: 48px; align-items: center">
-<img loading="lazy" src="images/nara.jpg" alt="奈良くるみコーチ" style="flex: 1 1 320px; min-width: 0; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 30%; border-radius: 16px; display: block">
+<img loading="lazy" src="images/nara.jpg" alt="奈良くるみコーチ" class="lp-coach" style="flex: 1 1 320px; min-width: 0; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 30%; border-radius: 16px; display: block">
 <div style="flex: 1 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
 <div style="font-size: 14px; font-weight: 700; color: #0057A8; letter-spacing: 0.1em">COACH</div>
 <div style="display: flex; flex-direction: column; gap: 8px">
@@ -261,7 +279,7 @@ a{color:#0057A8}a:hover{color:#1B2A6B}
 <div style="max-width: 1120px; margin: 0 auto; padding: 72px 24px; display: flex; flex-wrap: wrap-reverse; gap: 40px; align-items: center">
 <div style="flex: 1 1 480px; min-width: 0; max-width: 800px; display: flex; flex-direction: column; gap: 16px">
 <div style="font-size: 14px; font-weight: 700; color: #0057A8; letter-spacing: 0.1em">ASICS × KURUMI NARA</div>
-<h2 style="margin: 0; font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 900; font-size: 32px; line-height: 1.45">奈良くるみコーチは、<br>アシックスの契約アスリートです。</h2>
+<h2 style="margin: 0; word-break: auto-phrase; font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 900; font-size: 32px; line-height: 1.45">奈良くるみコーチは、<br>アシックスの契約アスリートです。</h2>
 <p style="margin: 0; color: #4A5370">この日ジュニアたちに伝えたフットワークを、奈良コーチ自身もアシックスのシューズとともに磨いてきました。[契約内容・期間など、アシックス確認後に追記]</p>
 </div>
 </div>
@@ -270,10 +288,10 @@ a{color:#0057A8}a:hover{color:#1B2A6B}
 <section style="background: #FFE14D">
 <div style="max-width: 1120px; margin: 0 auto; padding: 56px 24px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between">
 <div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
-<h2 style="margin: 0; font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 900; font-size: 30px; color: #1B2A6B">あなたの動きに合うのは、STABILITY？ SPEED？</h2>
+<h2 style="margin: 0; word-break: auto-phrase; font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 900; font-size: 30px; color: #1B2A6B">あなたの動きに合うのは、STABILITY？ SPEED？</h2>
 <p style="margin: 0; color: #1B2A6B">ジュニアが体感したアシックスのテニスシューズを、ぜひ履き比べてみてください。</p>
 </div>
-<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<div class="lp-cta" style="display: flex; flex-wrap: wrap; gap: 12px">
 <a href="#" style="background: #1B2A6B; color: #FFFFFF; font-weight: 700; text-decoration: none; padding: 14px 24px; border-radius: 999px">商品ページへ</a>
 <a href="#" style="background: #FFFFFF; color: #1B2A6B; font-weight: 700; text-decoration: none; padding: 14px 24px; border-radius: 999px">OneASICSに登録</a>
 <a href="#" style="background: #FFFFFF; color: #1B2A6B; font-weight: 700; text-decoration: none; padding: 14px 24px; border-radius: 999px">Xでシェア</a>
@@ -283,7 +301,6 @@ a{color:#0057A8}a:hover{color:#1B2A6B}
 
 <footer style="background: #1B2A6B; color: #DCE6F7">
 <div style="max-width: 1120px; margin: 0 auto; padding: 40px 24px; display: flex; flex-direction: column; gap: 10px; font-size: 13px">
-<div>本ページはアシックスとのタイアップ企画です（PR）。</div>
 <div>掲載している参加者の写真・映像は、保護者の同意を得て掲載しています。</div>
 <div>サポートコーチ：内島萌夏選手、柴原瑛菜選手｜協力：関西大学、関西テニス協会</div>
 <div>主催：アシックス ジュニアテニスアカデミー運営事務局｜取材・制作：Tennis365</div>
