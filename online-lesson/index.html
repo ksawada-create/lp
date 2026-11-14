@@ -55,18 +55,17 @@
 
   /* hero */
   .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-  .hero{background:radial-gradient(1200px 600px at 75% 10%,#1E5FD0 0%,#0A2350 55%,#071733 100%);color:#EEF4FF;padding:48px 0 56px;position:relative;overflow:hidden}
+  .hero-banner{background:#0A2350;line-height:0}
+  .hero-banner img{display:block;width:100%;height:auto;max-height:calc(82vh - 68px);min-height:360px;object-fit:cover;object-position:50% 40%}
+  .hero{background:linear-gradient(180deg,#0A2350 0%,#071733 100%);color:#EEF4FF;padding:36px 0 44px;position:relative}
   .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;background:linear-gradient(90deg,#D4F03A,#3FA9FF)}
-  .hero-pic{min-width:0}
-  .hero-img{display:block;width:100%;max-width:640px;height:auto;margin-left:auto;border-radius:20px;box-shadow:0 30px 70px rgba(0,10,40,.55),0 0 0 1px rgba(120,180,255,.25)}
-  .hero-copy{display:grid;grid-template-columns:45fr 55fr;gap:48px;align-items:center}
-  .hero-act{margin-top:28px}
-  .hero-catch{font-size:clamp(28px,3.6vw,46px);font-weight:900;line-height:1.4;margin:0 0 12px;color:#fff}
+  .hero-copy{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center}
+  .hero-catch{font-size:clamp(24px,2.8vw,36px);font-weight:900;line-height:1.4;margin:0 0 10px;color:#fff}
   .hero-catch em{font-style:normal;color:#D4F03A}
-  .hero p.sub{font-size:clamp(14px,1.4vw,16px);color:#B9CCEA;margin:0}
+  .hero p.sub{font-size:clamp(14px,1.3vw,16px);color:#B9CCEA;margin:0;max-width:640px}
   .hero .ctas{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
   .hero .btn-sub{color:#EEF4FF}
-  .hero-points{display:flex;gap:18px;margin-top:22px;flex-wrap:wrap;font-size:14px;color:#B9CCEA}
+  .hero-points{display:flex;gap:18px;margin-top:18px;flex-wrap:wrap;font-size:14px;color:#B9CCEA}
   .hero-points span{display:flex;gap:6px;align-items:center}
   .hero-points svg{width:18px;height:18px;color:#D4F03A}
   /* worries */
@@ -176,10 +175,9 @@
     section{padding:72px 0}
     .nav{display:none}
     .hero-copy,.ai,.price-grid,.coach{grid-template-columns:1fr}
-    .hero{padding:16px 0 44px}
-    .hero-img{border-radius:16px;max-width:none}
-    .hero-copy{gap:24px}
-    .hero-pic{order:-1}
+    .hero{padding:24px 0 40px}
+    .hero-copy{grid-template-columns:1fr;gap:22px}
+    .hero-banner img{max-height:none;min-height:0}
     .worries{grid-template-columns:1fr 1fr}
     .steps,.deliver{grid-template-columns:1fr}
     .shoot{grid-template-columns:1fr 1fr}
@@ -218,30 +216,28 @@
 
 <main id="top">
   <!-- HERO -->
+  <h1 class="vh">TENNIS365 FORM LAB 動画フォーム解析</h1>
+  <div class="hero-banner">
+    <picture>
+      <source media="(max-width:700px)" srcset="images/hero-wide-sp.jpg">
+      <img src="images/hero-wide.jpg" width="1920" height="1080" alt="TENNIS365 FORM LAB 動画フォーム解析：スイングの骨格をAIで解析する画面のイメージ" fetchpriority="high">
+    </picture>
+  </div>
   <div class="hero">
-    <div class="wrap">
-      <h1 class="vh">TENNIS365 FORM LAB 動画フォーム解析</h1>
-      <div class="hero-copy">
-        <div>
-          <p class="hero-catch">スマホで撮って、<br>送るだけ。<br><em>上達が、見える。</em></p>
-          <p class="sub">あなたのスイング動画を、テニス365のコーチが添削。AIがフォームを数値で分析し、添削動画とシートでお届けします。</p>
-        <div class="hero-act">
-          <div class="ctas">
-            <a class="btn btn-main js-pay" href="#price">申し込む <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-            <a class="btn btn-sub" href="#how">レッスンの流れを見る</a>
-          </div>
-          <div class="hero-points">
-            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>全国どこからでも</span>
-            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span class="js-days">7</span>日以内にお届け</span>
-            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>初心者から上級者まで</span>
-          </div>
+    <div class="wrap hero-copy">
+      <div>
+        <p class="hero-catch">スマホで撮って、送るだけ。<br><em>上達が、見える。</em></p>
+        <p class="sub">あなたのスイング動画を、テニス365のコーチが添削。AIがフォームを数値で分析し、添削動画とシートでお届けします。</p>
+      </div>
+      <div class="hero-act">
+        <div class="ctas">
+          <a class="btn btn-main js-pay" href="#price">申し込む <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn-sub" href="#how">レッスンの流れを見る</a>
         </div>
-        </div>
-        <div class="hero-pic">
-          <picture>
-        <source media="(max-width:700px)" srcset="images/hero-sp.jpg">
-        <img class="hero-img" src="images/hero.jpg" width="1448" height="1086" alt="TENNIS365 FORM LAB 動画フォーム解析：スイングの骨格をAIで解析する画面のイメージ" fetchpriority="high">
-      </picture>
+        <div class="hero-points">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>全国どこからでも</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span class="js-days">7</span>日以内にお届け</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>初心者から上級者まで</span>
         </div>
       </div>
     </div>
