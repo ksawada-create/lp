@@ -16,6 +16,8 @@
     PRICE: '0,000',                                          // 1回の料金（数字のみ・税込）
     DAYS: 7,                                                    // 返信までの日数
     CONTACT: 'info@example.com',                                // お問い合わせ先
+    HERO_IMAGE: '',      // トップの写真（例：'images/hero.jpg'。空ならイラストを表示）
+    COACH_IMAGE: '',     // コーチの写真（例：'images/coach.jpg'）
     SAMPLE_YOUTUBE_ID: '',                                      // サンプル動画（YouTubeの動画ID。空なら非表示）例：'dQw4w9WgXcQ'
   };
 </script>
@@ -53,22 +55,34 @@
   .nav a:hover{color:var(--ink)}
   .hd .btn{padding:10px 20px;font-size:14px;box-shadow:0 4px 0 #9DB548}
 
-  /* hero */
-  .hero{background:var(--green);color:#EEF4EC;padding:72px 0 88px;position:relative;overflow:hidden}
-  .hero::before{content:"";position:absolute;right:-180px;top:-160px;width:620px;height:620px;border-radius:50%;border:2px solid rgba(201,226,101,.18)}
-  .hero::after{content:"";position:absolute;right:-60px;bottom:-260px;width:520px;height:520px;border-radius:50%;background:rgba(255,255,255,.03)}
-  .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;position:relative;z-index:1}
-  .tag{display:inline-flex;gap:8px;align-items:center;background:rgba(201,226,101,.14);color:var(--lime);border:1px solid rgba(201,226,101,.4);border-radius:999px;padding:4px 14px;font-size:13px;font-weight:700}
-  .hero h1{font-size:clamp(32px,5vw,58px);line-height:1.3;margin:20px 0 20px;font-weight:900;letter-spacing:.02em;color:#fff}
-  .hero h1 em{font-style:normal;color:var(--lime)}
-  .hero p.sub{font-size:clamp(15px,1.6vw,18px);color:#C9D9CD;margin:0 0 34px}
+  /* hero（明るいデザイン） */
+  .hero{background:linear-gradient(180deg,#FFFFFF 0%,#F1F7E8 100%);padding:56px 0 80px;position:relative;overflow:hidden}
+  .hero::before{content:"";position:absolute;right:-140px;top:-120px;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(201,226,101,.45),rgba(201,226,101,0) 70%)}
+  .hero::after{content:"";position:absolute;left:-160px;bottom:-200px;width:460px;height:460px;border-radius:50%;background:radial-gradient(circle,rgba(110,190,140,.18),rgba(110,190,140,0) 70%)}
+  .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;position:relative;z-index:1}
+  .tag{display:inline-flex;gap:8px;align-items:center;background:var(--lime2);color:var(--green);border-radius:999px;padding:5px 14px;font-size:13px;font-weight:700}
+  .tag i{width:8px;height:8px;border-radius:50%;background:#3E9B5C;display:inline-block}
+  .hero h1{font-size:clamp(34px,5vw,60px);line-height:1.3;margin:20px 0 20px;font-weight:900;letter-spacing:.02em;color:var(--green)}
+  .hero h1 em{font-style:normal;background:linear-gradient(transparent 62%,var(--lime) 62%);padding:0 .08em}
+  .hero p.sub{font-size:clamp(15px,1.5vw,17px);color:var(--muted);margin:0 0 32px;max-width:520px}
+  @media (max-width:900px){.pc{display:none}}
   .hero .ctas{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
-  .hero .btn-sub{color:#EEF4EC}
-  .hero-points{display:flex;gap:22px;margin-top:34px;flex-wrap:wrap;font-size:14px;color:#C9D9CD}
-  .hero-points span{display:flex;gap:8px;align-items:center}
-  .hero-points svg{width:18px;height:18px;color:var(--lime)}
-  .phone{justify-self:center;width:min(340px,100%)}
-
+  .hero .btn-sub{color:var(--green)}
+  .hero-points{display:flex;gap:10px;margin-top:30px;flex-wrap:wrap;font-size:14px}
+  .hero-points span{display:flex;gap:8px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:700;color:var(--ink)}
+  .hero-points svg{width:16px;height:16px;color:#3E9B5C}
+  .hero-visual{position:relative;padding:20px 10px 30px 30px}
+  .photo{position:relative;border-radius:32px;overflow:hidden;aspect-ratio:4/5;box-shadow:0 30px 60px rgba(31,61,43,.18);background:#DCEFF9}
+  .photo img,.photo svg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .float{position:absolute;background:#fff;border-radius:18px;box-shadow:0 14px 34px rgba(31,61,43,.16);padding:12px 16px;display:flex;gap:12px;align-items:center;font-size:14px;line-height:1.5}
+  .float b{display:block;color:var(--green)}
+  .float small{color:var(--muted);font-size:12px}
+  .float .av{width:38px;height:38px;border-radius:50%;background:var(--lime);display:grid;place-items:center;color:var(--green);font-weight:900;flex:none}
+  .f-comment{left:0;top:56px;max-width:260px}
+  .f-ai{left:6px;bottom:6px}
+  .f-ai .num{font-family:"Barlow Condensed",sans-serif;font-size:34px;font-weight:700;color:#E2662B;line-height:1}
+  .f-days{right:-4px;top:0;background:var(--green);color:#fff;border-radius:999px;padding:10px 18px;font-weight:700}
+  .f-days b{display:inline;color:var(--lime)}
   /* worries */
   .worries{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
   .worry{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px 22px;position:relative}
@@ -97,13 +111,13 @@
   .dv .when{display:inline-block;font-size:12px;font-weight:700;color:var(--green);background:var(--lime2);border-radius:6px;padding:1px 8px;margin-bottom:10px}
   .dv p{margin:0;color:var(--muted);font-size:15px}
 
-  .ai{margin-top:56px;background:var(--green);color:#E6EFE8;border-radius:28px;padding:48px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
-  .ai h3{font-size:clamp(22px,2.6vw,30px);line-height:1.5;margin:6px 0 14px;color:#fff}
-  .ai p{margin:0 0 20px;color:#C9D9CD}
+  .ai{margin-top:56px;background:#EAF4E2;color:var(--ink);border-radius:28px;padding:48px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+  .ai h3{font-size:clamp(22px,2.6vw,30px);line-height:1.5;margin:6px 0 14px;color:var(--green)}
+  .ai p{margin:0 0 20px;color:var(--muted)}
   .ai ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .ai li{background:rgba(255,255,255,.06);border:1px solid rgba(201,226,101,.25);border-radius:12px;padding:10px 14px;font-size:14px;font-weight:700}
-  .ai .eyebrow{color:var(--lime)}
-  .ai .note{font-size:12px;color:#9DB3A3;margin-top:14px}
+  .ai li{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:14px;font-weight:700}
+  .ai .eyebrow{color:#3E7A50}
+  .ai .note{font-size:12px;color:var(--muted);margin-top:14px}
 
   /* sample video */
   .video-frame{position:relative;aspect-ratio:16/9;border-radius:22px;overflow:hidden;background:var(--green);box-shadow:0 20px 50px rgba(20,37,27,.18)}
@@ -111,7 +125,8 @@
 
   /* coach */
   .coach{display:grid;grid-template-columns:260px 1fr;gap:36px;background:#fff;border:1px solid var(--line);border-radius:24px;padding:36px;align-items:center}
-  .coach .ph{aspect-ratio:1;border-radius:20px;background:repeating-linear-gradient(45deg,#E8EEE5 0 12px,#F1F5EF 12px 24px);display:grid;place-items:center;color:#8A9B8F;font-size:13px;text-align:center}
+  .coach .ph img{width:100%;height:100%;object-fit:cover}
+  .coach .ph{aspect-ratio:1;border-radius:20px;overflow:hidden;background:repeating-linear-gradient(45deg,#E8EEE5 0 12px,#F1F5EF 12px 24px);display:grid;place-items:center;color:#8A9B8F;font-size:13px;text-align:center}
   .coach h3{margin:0 0 4px;font-size:24px}
   .coach .role{color:#3E7A50;font-weight:700;font-size:14px;margin-bottom:14px}
   .coach p{margin:0;color:var(--muted)}
@@ -163,10 +178,11 @@
   details .a{padding:0 24px 22px 56px;color:var(--muted);font-size:15px}
 
   /* cta */
-  .cta{background:var(--green);color:#EEF4EC;text-align:center;border-radius:32px;padding:64px 28px;position:relative;overflow:hidden}
+  .cta{background:linear-gradient(135deg,#D9EE84 0%,#F1F8D2 100%);color:var(--ink);text-align:center;border-radius:32px;padding:64px 28px;position:relative;overflow:hidden}
   .cta::before{content:"";position:absolute;left:-120px;bottom:-200px;width:420px;height:420px;border-radius:50%;background:var(--lime);opacity:.08}
-  .cta h2{color:#fff}
-  .cta p{color:#C9D9CD;margin:0 0 30px}
+  .cta h2{color:var(--green)}
+  .cta p{color:#3D5143;margin:0 0 30px}
+  .cta .btn-main{background:var(--green);color:#fff;box-shadow:0 6px 0 #0F2418}
   footer{padding:40px 0 56px;color:var(--muted);font-size:13px;text-align:center}
   footer a{color:var(--muted)}
 
@@ -182,6 +198,9 @@
     .flow{grid-template-columns:1fr 1fr;row-gap:32px}
     .fl:not(:last-child)::after{display:none}
     .ai{padding:32px 24px}
+    .hero{padding:36px 0 56px}
+    .hero-visual{width:100%;max-width:440px;margin:0 auto;padding:16px 4px 24px 12px}
+    .f-comment{top:30px}
     .coach{padding:24px}
     .coach .ph{max-width:200px}
     .fixed-cta{display:flex;position:fixed;left:12px;right:12px;bottom:12px;z-index:40}
@@ -193,6 +212,8 @@
     .ai ul{grid-template-columns:1fr}
     .hd .btn{display:none}
     .amount b{font-size:52px}
+    .float{font-size:12.5px;padding:10px 12px}
+    .f-ai .num{font-size:28px}
   }
 </style>
 </head>
@@ -217,67 +238,57 @@
   <div class="hero">
     <div class="wrap hero-grid">
       <div>
-        <span class="tag">テニス365 オンライン動画添削レッスン</span>
+        <span class="tag"><i></i>テニス365 オンライン動画添削レッスン</span>
         <h1>スマホで撮って、<br>送るだけ。<br><em>上達が、見える。</em></h1>
-        <p class="sub">あなたのスイング動画を、テニス365のコーチが添削。<br>AIがフォームを数値で分析し、添削動画とシートでお届けします。</p>
+        <p class="sub">あなたのスイング動画を、テニス365のコーチが添削。AIがフォームを数値で分析し、<br class="pc">添削動画とシートでお届けします。</p>
         <div class="ctas">
           <a class="btn btn-main js-pay" href="#price">申し込む <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           <a class="btn btn-sub" href="#how">レッスンの流れを見る</a>
         </div>
         <div class="hero-points">
-          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>全国どこからでも</span>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span class="js-days">7</span>日以内にお届け</span>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>初心者から上級者まで</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>全国どこからでも</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>予約・移動なし</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>初心者から上級者まで</span>
         </div>
       </div>
-      <!-- phone mock -->
-      <svg class="phone" viewBox="0 0 340 600" role="img" aria-label="スマホの画面にスイング動画と骨格、角度、コーチのコメントが表示されたイメージ">
-        <rect x="10" y="10" width="320" height="580" rx="44" fill="#0E1A12" stroke="#3A5E47" stroke-width="2"/>
-        <rect x="24" y="24" width="292" height="552" rx="32" fill="#1B2E22"/>
-        <rect x="128" y="36" width="84" height="20" rx="10" fill="#0E1A12"/>
-        <!-- court -->
-        <path d="M24 400 L316 360 L316 576 L24 576 Z" fill="#2E5A3D"/>
-        <path d="M24 470 L316 420" stroke="#E9F0EA" stroke-opacity=".5" stroke-width="2"/>
-        <path d="M60 576 L250 370" stroke="#E9F0EA" stroke-opacity=".35" stroke-width="2"/>
-        <!-- player silhouette -->
-        <g fill="#0F1D14" opacity=".85">
-          <circle cx="150" cy="172" r="20"/>
-          <path d="M132 198 Q150 190 170 198 L182 300 Q160 310 138 300 Z"/>
-          <path d="M140 296 L118 384 L104 470 L120 474 L140 392 L160 318 Z"/>
-          <path d="M168 300 L196 380 L222 456 L236 450 L214 372 L184 300 Z"/>
-          <path d="M170 210 L214 238 L250 214 L256 224 L218 254 L166 228 Z"/>
-          <path d="M134 210 L106 250 L96 292 L108 294 L120 258 L144 226 Z"/>
-        </g>
-        <!-- racket -->
-        <g transform="rotate(-28 262 196)"><ellipse cx="262" cy="176" rx="20" ry="28" fill="none" stroke="#C9E265" stroke-width="4"/><path d="M262 204 L262 236" stroke="#C9E265" stroke-width="5" stroke-linecap="round"/></g>
-        <!-- skeleton -->
-        <g stroke="#FF9F43" stroke-width="4" stroke-linecap="round" fill="none">
-          <path d="M166 212 L214 240 L252 218"/>
-        </g>
-        <g stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none" opacity=".9">
-          <path d="M136 212 L166 212"/><path d="M136 212 L108 252 L100 292"/><path d="M136 212 L142 300 L172 300 L166 212"/>
-          <path d="M142 300 L128 390 L112 470"/><path d="M172 300 L204 380 L228 452"/>
-        </g>
-        <g fill="#C9E265"><circle cx="166" cy="212" r="5"/><circle cx="214" cy="240" r="6" fill="#FF9F43"/><circle cx="252" cy="218" r="5" fill="#FF9F43"/><circle cx="136" cy="212" r="5"/><circle cx="128" cy="390" r="5"/><circle cx="204" cy="380" r="5"/><circle cx="142" cy="300" r="5"/><circle cx="172" cy="300" r="5"/></g>
-        <!-- angle label -->
-        <path d="M200 232 A16 16 0 0 0 226 230" stroke="#FF9F43" stroke-width="2.5" fill="none"/>
-        <rect x="196" y="252" width="62" height="28" rx="8" fill="#0E1A12" opacity=".85"/>
-        <text x="227" y="272" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-weight="700" font-size="20" fill="#FF9F43">148°</text>
-        <!-- arrow annotation -->
-        <path d="M70 140 Q100 110 128 150" stroke="#FFE14D" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-        <path d="M120 150 L130 154 L131 142" stroke="#FFE14D" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        <!-- timeline -->
-        <rect x="40" y="520" width="260" height="6" rx="3" fill="#3A5E47"/>
-        <rect x="40" y="520" width="120" height="6" rx="3" fill="#C9E265"/>
-        <circle cx="96" cy="508" r="9" fill="#FF8A7A"/><text x="96" y="512" text-anchor="middle" font-size="10" font-weight="900" fill="#2B0B06">1</text>
-        <circle cx="160" cy="508" r="9" fill="#FF8A7A"/><text x="160" y="512" text-anchor="middle" font-size="10" font-weight="900" fill="#2B0B06">2</text>
-        <circle cx="236" cy="508" r="9" fill="#FF8A7A"/><text x="236" y="512" text-anchor="middle" font-size="10" font-weight="900" fill="#2B0B06">3</text>
-        <!-- comment bubble -->
-        <rect x="40" y="72" width="214" height="58" rx="14" fill="#FFFFFF"/>
-        <circle cx="62" cy="101" r="12" fill="#FF8A7A"/><text x="62" y="105" text-anchor="middle" font-size="11" font-weight="900" fill="#2B0B06">2</text>
-        <text x="82" y="96" font-size="12" font-weight="700" fill="#14251B" font-family="Noto Sans JP, sans-serif">打点をもう少し前に。</text>
-        <text x="82" y="114" font-size="11" fill="#5B6B60" font-family="Noto Sans JP, sans-serif">ひじの角度は理想に近いです</text>
-      </svg>
+      <div class="hero-visual">
+        <div class="photo" id="heroPhoto">
+          <!-- 写真が未設定のときのイラスト（HERO_IMAGEを設定すると写真に置き換わります） -->
+          <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" role="img" aria-label="晴れたテニスコートでスイングする選手のイラスト">
+            <defs>
+              <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#BFE6FA"/><stop offset="1" stop-color="#EAF7FD"/></linearGradient>
+              <linearGradient id="court" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5DB37A"/><stop offset="1" stop-color="#3E9B5C"/></linearGradient>
+            </defs>
+            <rect width="400" height="500" fill="url(#sky)"/>
+            <circle cx="320" cy="80" r="46" fill="#FFF6C9"/><circle cx="320" cy="80" r="30" fill="#FFE98A"/>
+            <path d="M0 230 Q60 210 120 228 T240 224 T400 226 V270 H0Z" fill="#9FD3A9"/>
+            <rect y="262" width="400" height="20" fill="#2F7A4A"/>
+            <g stroke="#E8F5EC" stroke-width="2" opacity=".7"><path d="M0 268 H400"/><path d="M0 276 H400"/></g>
+            <rect y="282" width="400" height="218" fill="url(#court)"/>
+            <g stroke="#FFFFFF" stroke-width="4" opacity=".85" fill="none"><path d="M-40 500 L120 282"/><path d="M440 500 L280 282"/><path d="M40 392 H360"/><path d="M200 392 V500"/></g>
+            <!-- player -->
+            <g fill="#1F3D2B">
+              <circle cx="182" cy="232" r="20"/>
+              <path d="M164 254 Q182 246 202 254 L212 350 Q186 360 164 350 Z"/>
+              <path d="M170 346 L150 420 L138 470 L156 474 L170 424 L190 360 Z"/>
+              <path d="M196 350 L222 420 L246 466 L262 458 L238 412 L214 350 Z"/>
+              <path d="M200 266 L246 288 L284 262 L292 272 L250 306 L194 284 Z"/>
+              <path d="M168 266 L140 306 L130 346 L144 348 L156 312 L178 282 Z"/>
+            </g>
+            <path d="M162 226 Q182 206 204 224 L204 230 Q182 218 160 232 Z" fill="#FFFFFF"/>
+            <g transform="rotate(-30 300 232)"><ellipse cx="300" cy="212" rx="22" ry="30" fill="none" stroke="#E2662B" stroke-width="5"/><path d="M300 242 L300 278" stroke="#1F3D2B" stroke-width="6" stroke-linecap="round"/></g>
+            <circle cx="336" cy="176" r="11" fill="#D7F05A" stroke="#B5CC3A" stroke-width="2"/>
+            <!-- skeleton overlay -->
+            <g stroke="#FF9F43" stroke-width="4" stroke-linecap="round" fill="none"><path d="M198 268 L246 296 L284 270"/></g>
+            <g stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none" opacity=".95"><path d="M168 268 L198 268"/><path d="M168 268 L140 310 L134 346"/><path d="M168 268 L172 350 L204 350 L198 268"/><path d="M172 350 L156 424 L146 470"/><path d="M204 350 L230 420 L252 462"/></g>
+            <g fill="#FFFFFF"><circle cx="168" cy="268" r="5"/><circle cx="198" cy="268" r="5"/><circle cx="172" cy="350" r="5"/><circle cx="204" cy="350" r="5"/><circle cx="156" cy="424" r="5"/><circle cx="230" cy="420" r="5"/></g>
+            <circle cx="246" cy="296" r="7" fill="#FF9F43"/>
+          </svg>
+        </div>
+        <div class="float f-comment"><span class="av">C</span><div><b>打点をもう少し前に！</b><small>コーチのコメント　00:04</small></div></div>
+        <div class="float f-ai"><div><small>AI分析　ひじの角度</small><div class="num">148°</div></div></div>
+        <div class="float f-days">結果は<b><span class="js-days">7</span>日以内</b>にお届け</div>
+      </div>
     </div>
   </div>
 
@@ -407,7 +418,7 @@
       <h2>担当コーチ</h2>
       <p class="lead">テニス365とつながりのあるスクールで指導するコーチが、あなたの動画を一本ずつ見て添削します。</p>
       <div class="coach">
-        <div class="ph">コーチの写真<br>（差し替え）</div>
+        <div class="ph" id="coachPhoto">コーチの写真<br>（差し替え）</div>
         <div>
           <h3>[コーチ名]</h3>
           <div class="role">[所属スクール・資格など]</div>
@@ -422,7 +433,7 @@
     <div class="wrap">
       <span class="eyebrow">PRICE</span>
       <h2>料金</h2>
-      <p class="lead">お支払いは事前決済です。決済が完了すると、そのまま動画の提出フォームへ進めます。</p>
+      <p class="lead">お支払いは事前決済です。決済が完了すると、そのままお申込みフォームへ進めます。</p>
       <div class="price-grid">
         <div class="plan">
           <span class="badge">まずはここから</span>
@@ -511,7 +522,7 @@
   <section>
     <div class="wrap">
       <div class="cta">
-        <span class="eyebrow" style="color:var(--lime)">START</span>
+        <span class="eyebrow">START</span>
         <h2>今週の練習から、<br>撮って、送ってみよう。</h2>
         <p>1回<span class="js-price">0,000</span>円（税込）・<span class="js-days">7</span>日以内にお届け</p>
         <a class="btn btn-main js-pay" href="#price">申し込む <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
@@ -537,6 +548,14 @@
     each('.js-form', function (a) { if (C.FORM_URL) { a.href = C.FORM_URL; a.target = '_blank'; a.rel = 'noopener'; } });
     each('.js-price', function (el) { if (C.PRICE) el.textContent = C.PRICE; });
     each('.js-days', function (el) { if (C.DAYS) el.textContent = C.DAYS; });
+    function photo(id, src, alt) {
+      if (!src) return;
+      var box = document.getElementById(id), img = new Image();
+      img.alt = alt; img.src = src;
+      img.onload = function () { box.innerHTML = ''; box.appendChild(img); };
+    }
+    photo('heroPhoto', C.HERO_IMAGE, 'テニスコートでスイングする受講者');
+    photo('coachPhoto', C.COACH_IMAGE, '担当コーチ');
     if (C.SAMPLE_YOUTUBE_ID) {
       document.getElementById('sampleFrame').src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(C.SAMPLE_YOUTUBE_ID) + '?rel=0&playsinline=1';
       document.getElementById('sample').hidden = false;
