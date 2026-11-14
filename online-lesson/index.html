@@ -16,6 +16,7 @@
     PRICE: '0,000',                                          // 1回の料金（数字のみ・税込）
     DAYS: 7,                                                    // 返信までの日数
     CONTACT: 'info@example.com',                                // お問い合わせ先
+    SAMPLE_YOUTUBE_ID: '',                                      // サンプル動画（YouTubeの動画ID。空なら非表示）例：'dQw4w9WgXcQ'
   };
 </script>
 <style>
@@ -103,6 +104,10 @@
   .ai li{background:rgba(255,255,255,.06);border:1px solid rgba(201,226,101,.25);border-radius:12px;padding:10px 14px;font-size:14px;font-weight:700}
   .ai .eyebrow{color:var(--lime)}
   .ai .note{font-size:12px;color:#9DB3A3;margin-top:14px}
+
+  /* sample video */
+  .video-frame{position:relative;aspect-ratio:16/9;border-radius:22px;overflow:hidden;background:var(--green);box-shadow:0 20px 50px rgba(20,37,27,.18)}
+  .video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 
   /* coach */
   .coach{display:grid;grid-template-columns:260px 1fr;gap:36px;background:#fff;border:1px solid var(--line);border-radius:24px;padding:36px;align-items:center}
@@ -309,7 +314,7 @@
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg></div>
           <div class="no en">02<small>SEND</small></div>
           <h3>送る</h3>
-          <p>お支払い後、フォームから動画のリンクと「見てほしいポイント」を送信します。</p>
+          <p>お支払い後、フォームでお申込み。届いたメールのリンクから、動画ファイルをそのままアップロードします（登録不要）。</p>
         </div>
         <div class="step">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H5.2L4 17.2z"/><path d="M8 9h8M8 12h5"/></svg></div>
@@ -318,6 +323,16 @@
           <p>コーチの添削とAI分析の結果を、<span class="js-days">7</span>日以内にメールでお届けします。</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- SAMPLE VIDEO（設定でYouTubeの動画IDを入れると表示） -->
+  <section id="sample" class="bg-white" hidden>
+    <div class="wrap">
+      <span class="eyebrow">SAMPLE</span>
+      <h2>実際の添削動画</h2>
+      <p class="lead">受講者のスイングに、コーチのコメントとAIの分析を入れた添削動画の例です。</p>
+      <div class="video-frame"><iframe id="sampleFrame" title="添削動画のサンプル" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>
     </div>
   </section>
 
@@ -455,7 +470,7 @@
       </div>
       <div class="send-box">
         <div class="ic"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18a5 5 0 1 1 1-9.9A6 6 0 0 1 19.6 10 4 4 0 0 1 18 18z"/><path d="M12 12v7M9 15l3-3 3 3"/></svg></div>
-        <p><b>動画の送り方：</b>Googleドライブにアップロードし、共有を「リンクを知っている全員」にしてリンクを貼り付けてください（画質を落とさずに送れるのでおすすめです）。YouTubeの「限定公開」のリンクでも受け付けます。</p>
+        <p><b>動画の送り方：</b>お申込み後に届く受付メールのリンクから、動画ファイルをそのままアップロードしてください。アカウント登録は不要です。ファイル名の先頭に受付IDを付けてください（1ファイル2GBまで）。送った動画は事務局と担当コーチだけが見られ、ほかの受講者に見られることはありません。</p>
       </div>
     </div>
   </section>
@@ -468,11 +483,11 @@
       <p class="lead">会員登録は不要です。</p>
       <div class="flow">
         <div class="fl"><div class="dot">1</div><h3>お支払い</h3><p>「申し込む」から決済ページへ進み、お支払いを完了します。</p></div>
-        <div class="fl"><div class="dot">2</div><h3>動画を提出</h3><p>決済完了の画面から提出フォームへ。動画のリンクと見てほしいポイントを送ります。</p></div>
-        <div class="fl"><div class="dot">3</div><h3>受付メール</h3><p>受付IDを記載したメールが届きます。お支払いを確認後、添削を始めます。</p></div>
-        <div class="fl"><div class="dot">4</div><h3>結果のお届け</h3><p>お支払いの確認から<span class="js-days">7</span>日以内に、添削結果をメールでお送りします。</p></div>
+        <div class="fl"><div class="dot">2</div><h3>申込フォーム</h3><p>決済完了の画面からフォームへ。レベルや見てほしいポイントを入力します。</p></div>
+        <div class="fl"><div class="dot">3</div><h3>動画をアップロード</h3><p>受付IDを記載したメールが届きます。メールのリンクから動画を送ってください。</p></div>
+        <div class="fl"><div class="dot">4</div><h3>結果のお届け</h3><p>お支払いと動画を確認してから<span class="js-days">7</span>日以内に、添削結果をメールでお送りします。</p></div>
       </div>
-      <p class="already">お支払いがお済みで、まだ動画を提出していない方は <a class="js-form" href="#">動画の提出フォーム</a> へ</p>
+      <p class="already">お支払いがお済みで、まだお申込みフォームを送っていない方は <a class="js-form" href="#">お申込みフォーム</a> へ</p>
     </div>
   </section>
 
@@ -484,9 +499,9 @@
       <details><summary>初心者でも申し込めますか？</summary><div class="a">はい。テニスを始めたばかりの方から上級者の方まで、レベルに合わせて添削します。フォームにテニス歴とレベルをご記入ください。</div></details>
       <details><summary>1回でいくつのショットを見てもらえますか？</summary><div class="a">1回の添削につき1ショットが基本です。いちばん見てほしいショットを選んでください。複数のショットをご希望の場合は、ショットごとにお申し込みください。</div></details>
       <details><summary>どんなスマホで撮ればいいですか？</summary><div class="a">お手持ちのスマホで大丈夫です。iPhoneの場合は、カメラの設定を「互換性優先」にして撮影すると、動画を確実に開くことができます。</div></details>
-      <details><summary>送った動画はどのように扱われますか？</summary><div class="a">動画は添削の目的にのみ使用し、ご本人の同意なく公開することはありません。添削結果が届いたあとは、ご自身で動画を削除していただいて構いません。</div></details>
-      <details><summary>結果はいつ届きますか？</summary><div class="a">お支払いの確認から<span class="js-days">7</span>日以内に、受付時のメールアドレスへお送りします。</div></details>
-      <details><summary>動画が開けないと言われたらどうすればいいですか？</summary><div class="a">共有設定が「リンクを知っている全員」（YouTubeの場合は「限定公開」）になっているかご確認ください。事務局からご連絡する場合もあります。</div></details>
+      <details><summary>送った動画はほかの人に見られませんか？</summary><div class="a">見られません。アップロードされた動画は事務局と担当コーチだけが見られる場所に保存され、ほかの受講者からは見えません。動画は添削の目的にのみ使用し、ご本人の同意なく公開することはありません。</div></details>
+      <details><summary>結果はいつ届きますか？</summary><div class="a">お支払いと動画の到着を確認してから<span class="js-days">7</span>日以内に、お申込み時のメールアドレスへお送りします。</div></details>
+      <details><summary>動画はどうやって送ればいいですか？</summary><div class="a">お申込み後に届く受付メールのリンクを開き、スマホやパソコンから動画ファイルを選んでアップロードするだけです。アカウント登録やアプリのインストールは不要です。名前とメールアドレスはお申込み時と同じものを入力し、ファイル名の先頭に受付IDを付けてください。</div></details>
       <details><summary>キャンセルはできますか？</summary><div class="a">お支払い後のキャンセルについては、事務局までお問い合わせください。</div></details>
       <details><summary>問い合わせ先を教えてください</summary><div class="a">テニス365 オンラインレッスン事務局（<a class="js-contact" href="#">info@example.com</a>）までご連絡ください。</div></details>
     </div>
@@ -522,6 +537,10 @@
     each('.js-form', function (a) { if (C.FORM_URL) { a.href = C.FORM_URL; a.target = '_blank'; a.rel = 'noopener'; } });
     each('.js-price', function (el) { if (C.PRICE) el.textContent = C.PRICE; });
     each('.js-days', function (el) { if (C.DAYS) el.textContent = C.DAYS; });
+    if (C.SAMPLE_YOUTUBE_ID) {
+      document.getElementById('sampleFrame').src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(C.SAMPLE_YOUTUBE_ID) + '?rel=0&playsinline=1';
+      document.getElementById('sample').hidden = false;
+    }
     each('.js-contact', function (a) { if (C.CONTACT) { a.href = 'mailto:' + C.CONTACT; a.textContent = C.CONTACT; } });
     // ペライチなどにiframeで埋め込むとき、親ページへ高さを知らせる
     function postH() { try { parent.postMessage({ t365Height: document.documentElement.scrollHeight }, '*'); } catch (e) {} }
