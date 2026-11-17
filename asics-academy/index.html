@@ -300,6 +300,13 @@ a{color:#0057A8}a:hover{opacity:.88}
   window.addEventListener("resize",send);
   if(window.ResizeObserver){new ResizeObserver(send).observe(document.body);}
   setTimeout(send,1500);
+  document.addEventListener("click",function(e){
+    var a=e.target.closest('a[href^="#"]'); if(!a) return;
+    var el=document.querySelector(a.getAttribute("href")); if(!el) return;
+    e.preventDefault();
+    el.scrollIntoView({behavior:"smooth",block:"start"});
+    try{history.replaceState(null,"",a.getAttribute("href"));}catch(_){}
+  });
 })();
 </script>
 </body>
