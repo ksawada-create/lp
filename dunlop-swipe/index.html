@@ -42,6 +42,13 @@
   .slide .bg{position:absolute;inset:0;z-index:0;overflow:hidden}
   .slide .bg img,.slide .bg video{width:100%;height:100%;object-fit:cover;display:block}
   .bg .yt{position:absolute;top:50%;left:50%;height:100%;width:max(100%, calc(100dvh * 9 / 16));transform:translate(-50%,-50%);border:0;pointer-events:none}
+  /* 動画の再生ボタン（自動再生されないとき） */
+  .playov{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:opacity .25s}
+  .playov.show{opacity:1}
+  .playov i{width:76px;height:76px;border-radius:50%;background:rgba(0,0,0,.55);border:2px solid rgba(255,255,255,.85);display:flex;align-items:center;justify-content:center;margin-top:-30%}
+  .playov svg{width:34px;height:34px;margin-left:5px;color:#fff}
+  .slide.cta-on.first{padding-bottom:calc(150px + env(safe-area-inset-bottom))}
+  .slp.cta-first .hint{bottom:calc(86px + env(safe-area-inset-bottom))}
   .ytlocal{position:absolute;top:96px;left:50%;transform:translateX(-50%);z-index:3;display:flex;align-items:center;gap:6px;white-space:nowrap;background:rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:6px 12px;font-size:11px;font-weight:700;color:#fff}
   .ytlocal svg{width:13px;height:13px;color:#ff3b30}
   .slide .shade{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 28%,rgba(0,0,0,.15) 50%,rgba(0,0,0,.85) 100%)}
@@ -177,6 +184,16 @@
   .sv .s{background:#eee;color:#111}
   .sv .msg{font-size:12px;color:#2a7a2a;font-weight:700;margin-left:8px}
   .sv textarea{width:100%;height:110px;margin-top:8px;font:11px/1.4 ui-monospace,Menlo,monospace;border:1px solid #ddd;border-radius:6px;padding:6px}
+  .ed .dir{display:flex;gap:6px;margin-bottom:12px}
+  .ed .dir button{flex:1;border:1.5px solid #ccc;background:#fff;border-radius:8px;padding:10px 6px;font-weight:800;font-size:13px;color:#555}
+  .ed .dir button.on{border-color:#111;background:#111;color:#FFD100}
+  .ed .chk{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:#444}
+  .ed .chk input{width:auto;display:inline-block;margin:0}
+  @media (max-width:820px){
+    body.edit{--off:0px}
+    body.edit .ed{width:100%}
+    body.edit .slp{margin:0 auto}
+  }
   .ed-show{position:fixed;left:12px;top:12px;z-index:101;display:none;background:#FFD100;color:#111;border:0;border-radius:6px;padding:9px 12px;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit}
   body.edit.preview-only .ed-show{display:block}
 </style>
@@ -380,9 +397,22 @@
       var bg = old[key];
       if (!bg) { bg = document.createElement("div"); bg.className = "bg"; bg.innerHTML = mediaHTML(md, i, list.length); }
       sec.appendChild(bg);
-      sec.insertAdjacentHTML("beforeend", '<div class="shade"></div><div class="body">' + slideBody(s, i) + '</div>');
+      sec.insertAdjacentHTML("beforeend", '<div class="shade"></div>' + (md.type === "yt" || md.type === "video" ? '<div class="playov"><i><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></i></div>' : '') + '<div class="body">' + slideBody(s, i) + '</div>');
+      sec.ctaOn = !!cfg.cta_text && !s.hide_cta && !lines(s.buttons).length;
+      sec.classList.toggle("cta-on", sec.ctaOn); sec.classList.toggle("first", i === 0);
+      sec.playov = sec.querySelector(".playov"); sec.isVideo = md.type === "yt" || md.type === "video";
       sec.yt = bg.querySelector("iframe.yt"); sec.vid = bg.querySelector("video");
-      if (sec.yt && !sec.yt._bound) { sec.yt._bound = true; sec.yt.addEventListener("load", function(){ setTimeout(function(){ if (slides[cur] && slides[cur].yt === sec.yt) ytCmd(sec.yt, "playVideo"); }, 300); }); }
+      if (sec.yt && !sec.yt._bound) {
+        sec.yt._bound = true; sec.yt._state = -1;
+        sec.yt.addEventListener("load", function(){
+          var f = sec.yt;
+          // 再生状態を受け取るための登録
+          f.contentWindow.postMessage(JSON.stringify({ event: "listening", id: "slp" + i }), "*");
+          setTimeout(function(){ if (slides[cur] && slides[cur].yt === f) ytCmd(f, "playVideo"); }, 300);
+          setTimeout(updPlay, 1800);
+        });
+      }
+      if (sec.vid) { sec.vid.addEventListener("play", updPlay); sec.vid.addEventListener("pause", updPlay); }
       trackEl.appendChild(sec);
       return sec;
     });
@@ -399,6 +429,21 @@
     trackEl.offsetHeight; trackEl.style.transition = "";
   }
 
+  window.addEventListener("message", function(e){
+    if (!/youtube/.test(e.origin)) return;
+    var d; try { d = JSON.parse(e.data); } catch (x) { return; }
+    var st = d && d.info && typeof d.info.playerState === "number" ? d.info.playerState : (d && d.event === "onStateChange" ? d.info : null);
+    if (st == null) return;
+    slides.forEach(function(sl){ if (sl.yt && sl.yt.contentWindow === e.source) sl.yt._state = st; });
+    updPlay();
+  });
+  function isPlaying(sl){ return sl.yt ? (sl.yt._state === 1 || sl.yt._state === 3) : sl.vid ? !sl.vid.paused : true; }
+  function updPlay(){ slides.forEach(function(sl, k){ if (sl.playov) sl.playov.classList.toggle("show", k === cur && !isPlaying(sl) && !LOCAL); }); }
+  function togglePlay(sl){
+    if (sl.yt) { var pl = isPlaying(sl); ytCmd(sl.yt, pl ? "pauseVideo" : "playVideo"); sl.yt._state = pl ? 2 : 1; }
+    else if (sl.vid) { if (sl.vid.paused) { var p = sl.vid.play(); if (p && p.catch) p.catch(function(){}); } else sl.vid.pause(); }
+    updPlay(); track("video_tap", { slide_index: cur + 1, playing: isPlaying(sl) });
+  }
   function ytCmd(f, cmd){ if (f && f.contentWindow) f.contentWindow.postMessage(JSON.stringify({ event: "command", func: cmd, args: [] }), "*"); }
 
   function go(i, how){
@@ -415,7 +460,9 @@
     for (var k = 0; k < N; k++) bars[k].classList.toggle("done", k <= cur);
     $("count").textContent = (cur + 1) + " / " + N;
     $("hint").classList.toggle("hide", cur !== 0);
-    $("cta").classList.toggle("hide", cur === 0 || cur === N - 1);
+    $("cta").classList.toggle("hide", !slides[cur].ctaOn);
+    root.classList.toggle("cta-first", cur === 0 && slides[cur].ctaOn);
+    updPlay();
     $("snd").classList.toggle("show", !!(slides[cur].yt || slides[cur].vid));
     $("prevBtn").disabled = cur === 0; $("nextBtn").disabled = cur === N - 1;
     if (how === "init") return;
@@ -437,14 +484,16 @@
     else if (Math.abs(dx) > 50) { dx < 0 ? next("swipe") : prev("swipe"); }
     else if (!moved || (Math.abs(dx) < 10 && Math.abs(dy) < 10)) {
       if (e.target.closest("a,button")) return;
+      e.preventDefault();
+      if (slides[cur].isVideo) { togglePlay(slides[cur]); return; }   // 動画のスライドはタップで再生・一時停止
       var r = root.getBoundingClientRect();
       (t.clientX - r.left) < r.width * 0.3 ? prev("tap") : next("tap");
-      e.preventDefault();
     }
   }, { passive: false });
   root.addEventListener("click", function(e){
     if (e.target.closest("a,button")) return;
     if (e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents) return;
+    if (slides[cur].isVideo) { togglePlay(slides[cur]); return; }
     var r = root.getBoundingClientRect();
     (e.clientX - r.left) < r.width * 0.3 ? prev("click") : next("click");
   });
@@ -534,10 +583,10 @@
     function draw(openIdx){
       var st = DATA.settings;
       var h = '<div class="ed-tip"><b>【】</b>で囲んだ文字は黄色になります。例：【2ステップ】<br>「｜」は区切りの記号です（全角・半角どちらでも可）。<br>パソコンで開いた確認画面では、YouTubeが再生されないことがあります（公開後は再生されます）。</div>';
+      h += '<div class="sec-title">めくる方向</div><div class="dir"><button type="button" data-dir="vertical" class="' + (st.direction !== "horizontal" ? "on" : "") + '">縦にスワイプ</button><button type="button" data-dir="horizontal" class="' + (st.direction === "horizontal" ? "on" : "") + '">横にスワイプ</button></div>';
       h += '<div class="sec-title">全体の設定</div><details' + (openIdx === -1 ? " open" : "") + ' data-i="-1"><summary><span class="no">★</span><span class="tt">上部の表示・固定ボタン・計測</span></summary><div class="fs">' +
         field("brand", "上部の表示", "左上の小さな文字", "input", st.brand) +
-        '<label>めくる方向<select data-k="direction"><option value="vertical"' + (st.direction !== "horizontal" ? " selected" : "") + '>縦にスワイプ</option><option value="horizontal"' + (st.direction === "horizontal" ? " selected" : "") + '>横にスワイプ</option></select></label>' +
-        field("cta_text", "固定ボタンの文字", "2枚目〜最後の1つ前に表示。空にすると出さない", "input", st.cta_text) +
+        field("cta_text", "固定ボタンの文字", "画面下に固定で出るボタン。空にすると出さない", "input", st.cta_text) +
         field("cta_url", "固定ボタンのリンク先", "", "input", st.cta_url) +
         field("ga_id", "GA4 測定ID", "G-から始まるID。空なら計測しない", "input", st.ga_id) +
         field("campaign", "キャンペーン名", "英数字。GA4で絞り込むときに使う", "input", st.campaign) +
@@ -551,6 +600,7 @@
           '<details class="more"' + (hasMore(s) ? " open" : "") + '><summary>＋ カード・ステップ・表・ボタンなど</summary><div class="fs">' +
           MORE.map(function(f){ return field(f[0], f[1], f[2], f[3], s[f[0]]); }).join("") +
           '</div></details>' +
+          '<label class="chk"><input type="checkbox" data-k="hide_cta"' + (s.hide_cta ? " checked" : "") + '>このスライドでは固定ボタンを出さない</label>' +
           '<div class="acts"><button type="button" data-a="up">↑ 上へ</button><button type="button" data-a="down">↓ 下へ</button><button type="button" data-a="dup">複製</button><button type="button" class="del" data-a="del">削除</button></div>' +
           '</div></details>';
       });
@@ -569,7 +619,8 @@
     scroll.addEventListener("input", function(e){
       var t = e.target, k = t.dataset.k; if (!k) return;
       var d = t.closest("details[data-i]"), i = +d.dataset.i;
-      if (i === -1) DATA.settings[k] = t.value; else DATA.slides[i][k] = t.value;
+      var val = t.type === "checkbox" ? t.checked : t.value;
+      if (i === -1) DATA.settings[k] = val; else DATA.slides[i][k] = val;
       if (k === "media") updMediaNote(t);
       if (t.tagName === "TEXTAREA") t.rows = t.value.split("\n").length + 1;
       if (i >= 0 && /^(title|label|number)$/.test(k)) { var s = DATA.slides[i]; d.querySelector(".tt").textContent = String(s.title || s.label || s.number || "（タイトルなし）").replace(/【|】/g, "").split("\n")[0]; }
@@ -582,6 +633,8 @@
       scroll.querySelectorAll("details[data-i]").forEach(function(o){ if (o !== d) o.open = false; });
     }, true);
     scroll.addEventListener("click", function(e){
+      var dv = e.target.closest("[data-dir]");
+      if (dv) { DATA.settings.direction = dv.dataset.dir; scroll.querySelectorAll("[data-dir]").forEach(function(b){ b.classList.toggle("on", b === dv); }); markDirty(); render(); return; }
       if (e.target.id === "edAdd") {
         DATA.slides.splice(DATA.slides.length - 1, 0, { name: "slide" + (DATA.slides.length + 1), media: "", label: "", number: "", title: "新しいスライド", text: "", cards: "", steps: "", table: "", notes: "", note: "", buttons: "" });
         var ni = DATA.slides.length - 2; markDirty(); render(); draw(ni); go(ni, "edit"); return;
