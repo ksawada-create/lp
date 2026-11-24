@@ -202,6 +202,7 @@
   .ed .rg>span{flex:0 0 74px}
   .ed .rg input{flex:1;margin:0;padding:0;border:0;accent-color:#111}
   .ed .rg output{flex:0 0 38px;text-align:right;font-weight:400;color:#777;font-size:11px}
+  .ed input[type=file]{display:none}
   .ed .imp{display:block;width:100%;margin-top:8px;border:1px solid #c9b34a;background:#fff;border-radius:6px;padding:7px;font-size:12px;font-weight:700;color:#333}
   @media (max-width:820px){
     body.edit{--off:0px}
@@ -409,7 +410,7 @@
     root.classList.toggle("is-h", H);
     $("hintTxt").textContent = H ? "SWIPE" : "SWIPE UP";
     $("brand").innerHTML = fmt(cfg.brand);
-    $("cta").innerHTML = cfg.cta_text ? btn(cfg.cta_text, cfg.cta_url, "", "sticky") : "";
+    $("cta").innerHTML = ""; $("cta").dataset.k = "";
 
     // 動画は作り直さず使い回す（編集中のちらつき防止）
     var old = {};
@@ -426,7 +427,8 @@
       if (!bg) { bg = document.createElement("div"); bg.className = "bg"; bg.innerHTML = mediaHTML(md, i, list.length); }
       sec.appendChild(bg);
       sec.insertAdjacentHTML("beforeend", '<div class="shade"></div>' + (md.type === "yt" || md.type === "video" ? '<div class="playov"><i><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></i></div>' : '') + '<div class="body">' + slideBody(s, i) + '</div>');
-      sec.ctaOn = !!cfg.cta_text && !s.hide_cta && !lines(s.buttons).length;
+      sec.ctaText = (s.cta_text || "").trim() || cfg.cta_text; sec.ctaUrl = (s.cta_url || "").trim() || cfg.cta_url;
+      sec.ctaOn = !!sec.ctaText && !s.hide_cta && !lines(s.buttons).length;
       sec.classList.toggle("cta-on", sec.ctaOn); sec.classList.toggle("first", i === 0);
       sec.playov = sec.querySelector(".playov"); sec.isVideo = md.type === "yt" || md.type === "video";
       applyAdjust(sec, s);
@@ -449,9 +451,6 @@
     $("bars").innerHTML = new Array(N + 1).join("<i></i>");
     trackEl.querySelectorAll("[data-cta]").forEach(function(a){
       a.addEventListener("click", function(e){ if (EDIT) { e.preventDefault(); return; } track("cta_click", { cta: a.dataset.cta, slide_index: cur + 1, slide_name: slides[cur].dataset.name }); });
-    });
-    $("cta").querySelectorAll("[data-cta]").forEach(function(a){
-      a.addEventListener("click", function(e){ if (EDIT) { e.preventDefault(); return; } track("cta_click", { cta: "sticky", slide_index: cur + 1, slide_name: slides[cur].dataset.name }); });
     });
     trackEl.style.transition = "none";
     go(Math.min(cur, N - 1), "init");
@@ -502,7 +501,9 @@
     for (var k = 0; k < N; k++) bars[k].classList.toggle("done", k <= cur);
     $("count").textContent = (cur + 1) + " / " + N;
     $("hint").classList.toggle("hide", cur !== 0);
-    $("cta").classList.toggle("hide", !slides[cur].ctaOn);
+    var sc = slides[cur];
+    if (sc.ctaOn && $("cta").dataset.k !== sc.ctaText + "|" + sc.ctaUrl) { $("cta").innerHTML = btn(sc.ctaText, sc.ctaUrl, "", "sticky"); $("cta").dataset.k = sc.ctaText + "|" + sc.ctaUrl; }
+    $("cta").classList.toggle("hide", !sc.ctaOn);
     root.classList.toggle("cta-first", cur === 0 && slides[cur].ctaOn);
     updPlay();
     $("snd").classList.toggle("show", !!(slides[cur].yt || slides[cur].vid));
@@ -568,6 +569,11 @@
   document.addEventListener("visibilitychange", function(){ if (document.visibilityState === "hidden") exit(); });
   window.addEventListener("pagehide", exit);
 
+  $("cta").addEventListener("click", function(e){
+    var a = e.target.closest("[data-cta]"); if (!a) return;
+    if (EDIT) { e.preventDefault(); return; }
+    track("cta_click", { cta: "sticky", cta_text: slides[cur].ctaText, slide_index: cur + 1, slide_name: slides[cur].dataset.name });
+  });
   render();
   track("slide_view", { slide_index: 1, slide_name: slides[0] && slides[0].dataset.name, method: "init", max_reached: 1 });
 
@@ -643,7 +649,10 @@
           '<details class="more"' + (hasMore(s) ? " open" : "") + '><summary>＋ カード・ステップ・表・ボタンなど</summary><div class="fs">' +
           MORE.map(function(f){ return field(f[0], f[1], f[2], f[3], s[f[0]]); }).join("") +
           '</div></details>' +
-          '<label class="chk"><input type="checkbox" data-k="hide_cta"' + (s.hide_cta ? " checked" : "") + '>このスライドでは固定ボタンを出さない</label>' +
+          '<div class="adj"><div class="adj-t">このスライドの固定ボタン</div>' +
+          '<label class="chk"><input type="checkbox" data-k="hide_cta"' + (s.hide_cta ? " checked" : "") + '>このスライドでは出さない</label>' +
+          '<label>ボタンの文字<span>空なら全体の設定と同じ</span><input data-k="cta_text" value="' + esc(s.cta_text) + '" placeholder="' + esc(DATA.settings.cta_text) + '"></label>' +
+          '<label>リンク先<span>空なら全体の設定と同じ</span><input data-k="cta_url" value="' + esc(s.cta_url) + '" placeholder="' + esc(DATA.settings.cta_url) + '"></label></div>' +
           '<div class="acts"><button type="button" data-a="up">↑ 上へ</button><button type="button" data-a="down">↓ 下へ</button><button type="button" data-a="dup">複製</button><button type="button" class="del" data-a="del">削除</button></div>' +
           '</div></details>';
       });
