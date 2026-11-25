@@ -24,7 +24,7 @@
 <style>
   :root{
     --bg:#0b0b0b; --ink:#fff; --muted:rgba(255,255,255,.72);
-    --accent:#FFD100; --accent-ink:#111;
+    --accent:#FFD100; --accent-ink:#111; --accent-glow:rgba(255,209,0,.25);
     --off:0px;
     --frame-w:min(calc(100vw - var(--off)), calc(100dvh * 9 / 16));
   }
@@ -91,7 +91,7 @@
   .notes li{padding-left:1em;text-indent:-1em}
   .notes li::before{content:"・"}
 
-  .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:56px;border-radius:999px;background:var(--accent);color:var(--accent-ink);font-weight:900;font-size:16px;letter-spacing:.04em;box-shadow:0 8px 24px rgba(255,209,0,.25);margin-top:22px}
+  .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:56px;border-radius:999px;background:var(--accent);color:var(--accent-ink);font-weight:900;font-size:16px;letter-spacing:.04em;box-shadow:0 8px 24px var(--accent-glow);margin-top:22px}
   .btn svg{width:20px;height:20px}
   .btn.ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.5);box-shadow:none;height:48px;font-size:14px;margin-top:10px}
 
@@ -209,6 +209,28 @@
     body.edit .ed{width:100%}
     body.edit .slp{margin:0 auto}
   }
+  .ed .clr{display:flex;gap:8px;align-items:center;margin-top:4px}
+  .ed .clr input[type=color]{width:44px;height:36px;padding:2px;margin:0;flex:0 0 44px;cursor:pointer}
+  .ed .clr input:not([type=color]){margin:0}
+  .ed .hub{background:#111;color:#fff;border-radius:10px;padding:12px;margin-bottom:12px;display:grid;gap:8px}
+  .ed .hub-t{font-size:11px;font-weight:800;letter-spacing:.12em;color:#FFD100}
+  .ed .hub-row{display:flex;gap:6px}
+  .ed .hub select{margin:0;flex:1}
+  .ed .hub button.go{border:0;background:#FFD100;color:#111;border-radius:6px;padding:0 14px;font-weight:800;font-size:12.5px}
+  .ed .hub-url{font-size:12px;color:#ccc;word-break:break-all}
+  .ed .hub-url b{color:#fff}
+  .ed .hub-url a{color:#FFD100;text-decoration:underline;margin-left:6px}
+  .ed .hub .more>summary{color:#bbb}
+  .ed .hub label{color:#ddd}
+  .ed .gh{background:#eef4ff;border:1px solid #c9d8f5;border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:12px;line-height:1.7}
+  .ed .gh>summary{padding:0;font-weight:800;font-size:12px;color:#234}
+  .ed .gh ol{padding-left:1.3em;margin:6px 0;color:#345}
+  .ed .gh .st{font-weight:800}
+  .ed .gh .st.ok{color:#1a7a3a} .ed .gh .st.ng{color:#a33}
+  .ed .gh .row{display:flex;gap:6px;margin-top:6px}
+  .ed .gh .row input{margin:0;flex:1}
+  .ed .gh .row button{border:1px solid #9bb3e0;background:#fff;border-radius:6px;padding:0 10px;font-size:12px;font-weight:700}
+  .sv .opt.gh0{border-color:#c9b34a;background:#fffbe8}
   .ed-show{position:fixed;left:12px;top:12px;z-index:101;display:none;background:#FFD100;color:#111;border:0;border-radius:6px;padding:9px 12px;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit}
   body.edit.preview-only .ed-show{display:block}
 </style>
@@ -315,7 +337,50 @@
   }
   var q = location.search;
   var LOCAL = !/^https?:$/.test(location.protocol);   // パソコンのファイル・アプリ内プレビュー
-  var EDIT = (/[?&]edit=1/.test(q) || LOCAL) && !/[?&]view=1/.test(q);
+  var REPO = "ksawada-create/lp", SITE = "https://ksawada-create.github.io/lp/";
+  var PATHM = location.pathname.match(/\/lp\/([^\/]+)\//);
+  var HUB = /[?&]hub=1/.test(q) || !!(PATHM && PATHM[1] === "swipe-editor");   // 全LP共通の編集画面
+  var FOLDER = HUB ? "" : (PATHM ? PATHM[1] : "");
+  var EDIT = HUB || ((/[?&]edit=1/.test(q) || LOCAL) && !/[?&]view=1/.test(q));
+
+  /* ---------- GitHub連携 ---------- */
+  function ghToken(){ try { return localStorage.getItem("slp_gh_token") || ""; } catch (e) { return ""; } }
+  function ghSetToken(t){ try { if (t) localStorage.setItem("slp_gh_token", t); else localStorage.removeItem("slp_gh_token"); } catch (e) {} }
+  function ghFetch(path, opt){
+    opt = opt || {}; var hd = { "Accept": "application/vnd.github+json" }, t = ghToken();
+    if (t) hd.Authorization = "Bearer " + t;
+    opt.headers = hd;
+    return fetch("https://api.github.com/repos/" + REPO + "/contents/" + path, opt);
+  }
+  function b64(s){ return btoa(unescape(encodeURIComponent(s))); }
+  function unb64(s){ return decodeURIComponent(escape(atob(String(s).replace(/\s/g, "")))); }
+  function dataFrom(html){
+    var m = String(html).match(/<script type="application\/json" id="slp-data">([\s\S]*?)<\/script>/);
+    return m ? JSON.parse(m[1]) : null;
+  }
+  function ghRead(folder){
+    return ghFetch(folder + "/index.html?ref=main").then(function(r){
+      if (!r.ok) throw new Error("read " + r.status);
+      return r.json();
+    }).then(function(j){ return { sha: j.sha, html: unb64(j.content) }; });
+  }
+  function ghSave(folder, html){
+    return ghFetch(folder + "/index.html?ref=main").then(function(r){ return r.ok ? r.json() : null; }).then(function(cur){
+      var body = { message: "Update " + folder + " swipe LP", content: b64(html), branch: "main" };
+      if (cur && cur.sha) body.sha = cur.sha;
+      return ghFetch(folder + "/index.html", { method: "PUT", body: JSON.stringify(body) });
+    }).then(function(r){
+      if (r.status === 401) throw new Error("GitHubの連携キーが正しくないか、期限切れです");
+      if (r.status === 403 || r.status === 404) throw new Error("連携キーに lp への書き込み権限がありません");
+      if (!r.ok) throw new Error("保存に失敗しました（" + r.status + "）");
+      return r.json();
+    });
+  }
+  function ghTest(){
+    return fetch("https://api.github.com/repos/" + REPO, { headers: { "Accept": "application/vnd.github+json", "Authorization": "Bearer " + ghToken() } })
+      .then(function(r){ if (!r.ok) throw 0; return r.json(); })
+      .then(function(j){ return !!(j.permissions && j.permissions.push); });
+  }
   var debug = /[?&]debug=1/.test(q);
   if (debug) $("debug").style.display = "block";
 
@@ -387,6 +452,7 @@
 
   function render(){
     cfg = DATA.settings || {};
+    applyAccent(cfg.accent);
     var m = q.match(/[?&]dir=(horizontal|vertical)/);
     H = (m && !EDIT ? m[1] : cfg.direction) === "horizontal";
     root.classList.toggle("is-h", H);
@@ -453,6 +519,15 @@
     if (sl.yt) { var pl = isPlaying(sl); ytCmd(sl.yt, pl ? "pauseVideo" : "playVideo"); sl.yt._state = pl ? 2 : 1; }
     else if (sl.vid) { if (sl.vid.paused) { var p = sl.vid.play(); if (p && p.catch) p.catch(function(){}); } else sl.vid.pause(); }
     updPlay(); track("video_tap", { slide_index: cur + 1, playing: isPlaying(sl) });
+  }
+  /* テーマカラー */
+  function applyAccent(c){
+    c = /^#[0-9a-f]{6}$/i.test(String(c || "").trim()) ? String(c).trim() : "#FFD100";
+    var r = parseInt(c.substr(1, 2), 16), g = parseInt(c.substr(3, 2), 16), b = parseInt(c.substr(5, 2), 16);
+    var lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255, st = document.documentElement.style;
+    st.setProperty("--accent", c);
+    st.setProperty("--accent-ink", lum > 0.6 ? "#111" : "#fff");
+    st.setProperty("--accent-glow", "rgba(" + r + "," + g + "," + b + ",.25)");
   }
   /* 画像・動画の見せ方（全体表示／位置／拡大／暗さ） */
   function nz(v, d){ v = parseFloat(v); return isNaN(v) ? d : v; }
@@ -610,13 +685,50 @@
     }
     function hasMore(s){ return MORE.some(function(f){ return f[0] !== "name" && s[f[0]]; }); }
 
+    var BLANK = {
+      settings: { brand: "TENNIS 【365】 × CLIENT", direction: "vertical", accent: "#FFD100", cta_text: "詳しく見る", cta_url: "", ga_id: "", campaign: "new_campaign" },
+      slides: [
+        { name: "hero", media: "", label: "CAMPAIGN", number: "", title: "ここにタイトル\n【強調したい言葉】", text: "サブコピーが入ります", cards: "", steps: "", table: "", notes: "", note: "", buttons: "" },
+        { name: "point", media: "", label: "", number: "01 / POINT", title: "ポイントの見出し", text: "説明文が入ります", cards: "◯名｜賞品名\n◯名｜賞品名", steps: "", table: "", notes: "", note: "", buttons: "" },
+        { name: "cta", media: "", label: "", number: "ENTRY", title: "いますぐ\n【応募する】", text: "", cards: "", steps: "", table: "", notes: "", note: "", buttons: "応募する｜https://" }
+      ]
+    };
+    var LPS = null, lpMsg = "";
+    function hubHTML(){
+      if (!HUB) return "";
+      var opts = '<option value="">' + (LPS ? "LPを選んでください（" + LPS.length + "件）" : "一覧を読み込み中…") + '</option>' +
+        (LPS || []).map(function(n){ return '<option value="' + esc(n) + '"' + (n === FOLDER ? " selected" : "") + '>' + esc(n) + '</option>'; }).join("");
+      return '<div class="hub"><div class="hub-t">LPを選ぶ</div>' +
+        '<div class="hub-row"><select id="hubSel">' + opts + '</select><button type="button" class="go" id="hubOpen">開く</button></div>' +
+        '<div class="hub-url">' + (FOLDER ? '編集中：<b>' + esc(FOLDER) + '</b><a href="' + SITE + FOLDER + '/" target="_blank" rel="noopener">公開ページ</a>' : (lpMsg || 'LPを選ぶか、新しく作ってください')) + '</div>' +
+        '<details class="more"><summary>＋ 新しいLPを作る</summary><div class="fs">' +
+        '<label>フォルダ名<span>英小文字・数字・ハイフン。URLになります</span><input id="hubNew" placeholder="例：asics-swipe"></label>' +
+        '<label class="chk"><input type="checkbox" id="hubCopy">今開いているLPをコピーして作る</label>' +
+        '<button type="button" class="imp" id="hubCreate">作成する</button></div></details></div>';
+    }
+    function ghHTML(){
+      if (LOCAL) return "";
+      var t = ghToken();
+      return '<details class="gh"' + (t ? "" : " open") + '><summary>GitHub連携：<span class="st ' + (t ? "ok" : "ng") + '" id="ghSt">' + (t ? "連携済み（保存ボタンで直接公開）" : "未連携") + '</span></summary>' +
+        (t ? '<div class="row"><button type="button" id="ghOff">連携を解除</button></div>' :
+        '連携すると「HTMLを保存」から1クリックで公開ページに反映できます（最初の1回だけ設定）。<ol>' +
+        '<li>GitHubの右上アイコン → Settings → 左下の Developer settings</li>' +
+        '<li>Personal access tokens → Fine-grained tokens → Generate new token</li>' +
+        '<li>Repository access は「Only select repositories」で <b>lp</b> を選ぶ</li>' +
+        '<li>Permissions の Contents を「Read and write」にして作成</li>' +
+        '<li>表示された文字列（github_pat_〜）をコピーして下に貼る</li></ol>' +
+        '<div class="row"><input type="password" id="ghTok" placeholder="github_pat_…"><button type="button" id="ghOn">連携する</button></div>' +
+        '<div style="font-size:11px;color:#678;margin-top:4px">※ このパソコンのこのブラウザにだけ保存されます。他の人には共有しないでください。</div>') +
+        '</details>';
+    }
     function draw(openIdx){
       var st = DATA.settings;
-      var h = '<div class="ed-tip"><b>【】</b>で囲んだ文字は黄色になります。例：【2ステップ】<br>「｜」は区切りの記号です（全角・半角どちらでも可）。<br>パソコンで開いた確認画面では、YouTubeが再生されないことがあります（公開後は再生されます）。' +
+      var h = hubHTML() + ghHTML() + '<div class="ed-tip"><b>【】</b>で囲んだ文字はテーマカラーになります。例：【2ステップ】<br>「｜」は区切りの記号です（全角・半角どちらでも可）。<br>パソコンで開いた確認画面では、YouTubeが再生されないことがあります（公開後は再生されます）。' +
         '<button type="button" class="imp" id="edImport">前に保存したファイルの中身を読み込む</button><input type="file" id="edFile" accept=".html,text/html" hidden></div>';
       h += '<div class="sec-title">めくる方向</div><div class="dir"><button type="button" data-dir="vertical" class="' + (st.direction !== "horizontal" ? "on" : "") + '">縦にスワイプ</button><button type="button" data-dir="horizontal" class="' + (st.direction === "horizontal" ? "on" : "") + '">横にスワイプ</button></div>';
       h += '<div class="sec-title">全体の設定</div><details' + (openIdx === -1 ? " open" : "") + ' data-i="-1"><summary><span class="no">★</span><span class="tt">上部の表示・固定ボタン・計測</span></summary><div class="fs">' +
         field("brand", "上部の表示", "左上の小さな文字", "input", st.brand) +
+        '<label>テーマカラー<span>ボタン・強調文字・番号の色。ボタンの文字色は自動</span><div class="clr"><input type="color" data-k="accent" value="' + esc(/^#[0-9a-f]{6}$/i.test(st.accent || "") ? st.accent : "#FFD100") + '"><input data-k="accent" value="' + esc(st.accent || "#FFD100") + '" placeholder="#FFD100"></div></label>' +
         field("cta_text", "固定ボタンの文字", "画面下に固定で出るボタン。空にすると出さない", "input", st.cta_text) +
         field("cta_url", "固定ボタンのリンク先", "", "input", st.cta_url) +
         field("ga_id", "GA4 測定ID", "G-から始まるID。空なら計測しない", "input", st.ga_id) +
@@ -679,13 +791,14 @@
       var val = t.type === "checkbox" ? t.checked : t.type === "range" ? Number(t.value) : t.value;
       if (i === -1) DATA.settings[k] = val; else DATA.slides[i][k] = val;
       if (t.type === "range") { t.nextElementSibling.textContent = val + "%"; applyAdjust(slides[i], DATA.slides[i]); markDirty(); return; }
+      if (k === "accent") t.parentNode.querySelectorAll("[data-k=accent]").forEach(function(o){ if (o !== t && /^#[0-9a-f]{6}$/i.test(t.value)) o.value = t.value; });
       if (k === "media") updMediaNote(t);
       if (t.tagName === "TEXTAREA") t.rows = t.value.split("\n").length + 1;
       if (i >= 0 && /^(title|label|number)$/.test(k)) { var s = DATA.slides[i]; d.querySelector(".tt").textContent = String(s.title || s.label || s.number || "（タイトルなし）").replace(/【|】/g, "").split("\n")[0]; }
       markDirty(); rerender();
     });
     scroll.addEventListener("change", function(e){ if (e.target.id === "edFile" && e.target.files[0]) { importFile(e.target.files[0]); e.target.value = ""; } });
-    scroll.addEventListener("change", function(e){ if (e.target.tagName === "SELECT") { DATA.settings[e.target.dataset.k] = e.target.value; markDirty(); render(); } });
+    scroll.addEventListener("change", function(e){ if (e.target.tagName === "SELECT" && e.target.dataset.k) { DATA.settings[e.target.dataset.k] = e.target.value; markDirty(); render(); } });
     scroll.addEventListener("toggle", function(e){
       var d = e.target; if (!d.matches("details[data-i]") || !d.open) return;
       var i = +d.dataset.i; if (i >= 0) go(i, "edit");
@@ -693,6 +806,18 @@
     }, true);
     scroll.addEventListener("click", function(e){
       if (e.target.id === "edImport") { $("edFile").click(); return; }
+      if (e.target.id === "hubOpen") { var sel = $("hubSel").value; if (sel) openLP(sel); return; }
+      if (e.target.id === "hubCreate") { createLP(); return; }
+      if (e.target.id === "ghOn") {
+        var tk = $("ghTok").value.trim(); if (!tk) return;
+        ghSetToken(tk); $("ghSt").textContent = "確認中…";
+        ghTest().then(function(ok){
+          if (!ok) { ghSetToken(""); alert("このキーでは lp に書き込めません。Contents を Read and write にしたか確認してください"); }
+          draw(-2);
+        }, function(){ ghSetToken(""); alert("キーを確認できませんでした。コピーし直して貼ってください"); draw(-2); });
+        return;
+      }
+      if (e.target.id === "ghOff") { if (confirm("このブラウザから連携キーを削除しますか？")) { ghSetToken(""); draw(-2); } return; }
       var fb = e.target.closest("[data-fit]");
       if (fb) {
         var fi = +fb.closest("details[data-i]").dataset.i; DATA.slides[fi].fit = fb.dataset.fit;
@@ -720,17 +845,52 @@
       markDirty(); render(); draw(to); go(to, "edit");
     });
 
+    function setURL(){ if (HUB && history.replaceState) history.replaceState(null, "", location.pathname + (FOLDER ? "?lp=" + encodeURIComponent(FOLDER) : "")); }
+    function listLPs(){
+      ghFetch("?ref=main").then(function(r){ if (!r.ok) throw 0; return r.json(); }).then(function(items){
+        var dirs = items.filter(function(x){ return x.type === "dir" && x.name !== "swipe-editor" && x.name.charAt(0) !== "."; }).map(function(x){ return x.name; });
+        return Promise.all(dirs.map(function(n){
+          return fetch(SITE + n + "/index.html", { cache: "no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){ return t.indexOf('id="slp-data"') > -1 ? n : null; }, function(){ return null; });
+        }));
+      }).then(function(list){ LPS = list.filter(Boolean); redraw(); }, function(){ LPS = []; lpMsg = "一覧を読み込めませんでした。時間をおいて開き直してください"; redraw(); });
+    }
+    function redraw(){ var o = $("edScroll").querySelector("details[data-i][open]"); draw(o ? +o.dataset.i : -2); }
+    function openLP(folder){
+      if (dirty && !confirm("保存していない変更があります。破棄して開きますか？")) return;
+      lpMsg = "読み込み中…"; FOLDER = ""; redraw();
+      var p = ghRead(folder).then(function(x){ return x.html; }, function(){
+        return fetch(SITE + folder + "/index.html?" + Date.now(), { cache: "no-store" }).then(function(r){ if (!r.ok) throw 0; return r.text(); });
+      });
+      p.then(function(html){
+        var d = dataFrom(html); if (!d) throw 0;
+        DATA = d; FOLDER = folder; lpMsg = ""; cur = 0; dirty = false; $("edSave").classList.remove("dirty");
+        setURL(); render(); draw(0);
+      }).catch(function(){ lpMsg = "「" + folder + "」を開けませんでした"; redraw(); });
+    }
+    function createLP(){
+      var name = $("hubNew").value.trim().toLowerCase();
+      if (!/^[a-z0-9][a-z0-9-]{1,40}$/.test(name)) { alert("フォルダ名は英小文字・数字・ハイフンで入力してください（例：asics-swipe）"); return; }
+      if ((LPS || []).indexOf(name) > -1 || name === "swipe-editor") { alert("その名前はすでに使われています"); return; }
+      if (dirty && !confirm("保存していない変更があります。破棄して新しく作りますか？")) return;
+      DATA = JSON.parse(JSON.stringify($("hubCopy").checked && FOLDER ? DATA : BLANK));
+      DATA.settings.campaign = name.replace(/-/g, "_");
+      FOLDER = name; cur = 0; markDirty(); setURL(); render(); draw(0);
+      alert("「" + name + "」を作りました。中身を入れて「HTMLを保存」すると公開されます");
+    }
     function buildHTML(){
       var json = JSON.stringify(DATA, null, 2).replace(/</g, "\\u003c");
       return SOURCE.replace(/(<script type="application\/json" id="slp-data">)[\s\S]*?(<\/script>)/, function(_, a, b){ return a + "\n" + json + "\n" + b; });
     }
     function saved(){ dirty = false; $("edSave").classList.remove("dirty"); }
     $("edSave").onclick = function(){
-      var out = buildHTML();
+      if (HUB && !FOLDER) { alert("先に上の「LPを選ぶ」から開くか、新しいLPを作ってください"); return; }
+      var out = buildHTML(), canGH = !!(ghToken() && FOLDER);
       var bg = document.createElement("div"); bg.className = "sv-bg";
       bg.innerHTML =
-        '<div class="sv"><h4>HTMLを保存</h4>' +
-        '<div class="opt"><b>方法1：ファイルをダウンロード</b>保存された index.html を GitHub の同じフォルダにアップします。' +
+        '<div class="sv"><h4>HTMLを保存' + (FOLDER ? '（' + esc(FOLDER) + '）' : '') + '</h4>' +
+        (canGH ? '<div class="opt gh0"><b>GitHubに直接保存して公開</b>1〜2分で ' + SITE + esc(FOLDER) + '/ に反映されます。' +
+          '<br><button type="button" class="p" id="svGh">保存して公開する</button><span class="msg" id="svGhMsg"></span></div>' : '') +
+        '<div class="opt"><b>' + (canGH ? 'ほかの方法：' : '方法1：') + 'ファイルをダウンロード</b>保存された index.html を GitHub の lp の「' + esc(FOLDER || "同じ") + '」フォルダにアップします。' +
         '<br><button type="button" class="p" id="svDl">index.html をダウンロード</button><span class="msg" id="svDlMsg"></span></div>' +
         '<div class="opt"><b>方法2：コピーして GitHub に貼る（ダウンロードできないとき）</b>' +
         '<ol><li>下の「コードをコピー」を押す</li><li>GitHub で lp リポジトリ → フォルダ → index.html を開く</li><li>右上の鉛筆マーク（Edit）を押す</li><li>中身を全部選択（Ctrl+A／⌘+A）して貼り付け</li><li>右上の「Commit changes」を押す（1〜2分で公開ページに反映）</li></ol>' +
@@ -741,6 +901,13 @@
       $("svTx").value = out;
       bg.addEventListener("click", function(e){ if (e.target === bg) bg.remove(); });
       $("svClose").onclick = function(){ bg.remove(); };
+      if (canGH) $("svGh").onclick = function(){
+        var b = this; b.disabled = true; $("svGhMsg").textContent = "保存中…"; $("svGhMsg").style.color = "";
+        ghSave(FOLDER, out).then(function(){
+          $("svGhMsg").innerHTML = '保存しました。1〜2分で<a href="' + SITE + esc(FOLDER) + '/" target="_blank" rel="noopener">公開ページ</a>に反映されます';
+          saved(); if (LPS && LPS.indexOf(FOLDER) < 0) LPS.push(FOLDER);
+        }, function(err){ $("svGhMsg").textContent = err.message; $("svGhMsg").style.color = "#b00"; b.disabled = false; });
+      };
       $("svDl").onclick = function(){
         try {
           var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([out], { type: "text/html" })); a.download = "index.html";
@@ -759,7 +926,12 @@
     };
     window.addEventListener("beforeunload", function(e){ if (dirty) { e.preventDefault(); e.returnValue = ""; } });
 
-    draw(0);
+    draw(HUB ? -2 : 0);
+    if (HUB) {
+      listLPs();
+      var want = q.match(/[?&]lp=([a-z0-9-]+)/);
+      if (want) openLP(want[1]);
+    }
   }
 })();
 </script>
