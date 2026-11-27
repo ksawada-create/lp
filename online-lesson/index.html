@@ -102,6 +102,9 @@
   .ai ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .ai li{background:rgba(255,255,255,.06);border:1px solid rgba(212,240,58,.25);border-radius:12px;padding:10px 14px;font-size:14px;font-weight:700}
   .ai .eyebrow{color:var(--lime)}
+  .ai li.hl{grid-column:1/-1;display:flex;align-items:center;gap:8px;background:rgba(212,240,58,.14);border-color:var(--lime);color:#fff}
+  .ai li.hl svg{width:20px;height:20px;color:var(--lime);flex:none}
+  .ai li.hl em{font-style:normal;font-size:11px;font-weight:800;letter-spacing:.06em;background:var(--lime);color:#0A2350;border-radius:999px;padding:1px 8px;margin-left:auto}
   .ai .note{font-size:12px;color:#9AB3D6;margin-top:14px}
 
   /* sample video */
@@ -126,6 +129,10 @@
   .incl{list-style:none;padding:0;margin:0 0 30px;display:grid;gap:10px}
   .incl li{display:flex;gap:10px;align-items:flex-start}
   .incl svg{flex:none;width:22px;height:22px;color:#1565E0;margin-top:3px}
+  .incl .disc{background:#F1F9C9;border-radius:12px;padding:10px 14px;align-items:center}
+  .incl .disc svg{color:#0A2350;margin-top:0}
+  .incl .disc b{display:block;font-size:18px;line-height:1.3;color:#0A2350}
+  .incl .disc small{display:block;font-size:13px;color:#3E5374;line-height:1.5}
   .plan-next{background:var(--paper);border:1px dashed #B8C8DE;border-radius:26px;padding:36px;display:flex;flex-direction:column;justify-content:center}
   .plan-next h3{margin:0 0 8px;font-size:20px}
   .plan-next p{margin:0;color:var(--muted);font-size:15px}
@@ -195,6 +202,13 @@
     .ai ul{grid-template-columns:1fr}
     .hd .btn{display:none}
     .amount b{font-size:52px}
+    .send-box{grid-template-columns:1fr;gap:12px;padding:22px 20px}
+    .send-box .ic{width:44px;height:44px}
+    .flow{grid-template-columns:1fr;row-gap:22px}
+    .fl{text-align:left;padding:0;display:grid;grid-template-columns:48px 1fr;column-gap:16px;align-items:start}
+    .fl .dot{width:48px;height:48px;font-size:22px;margin:0;grid-row:span 2}
+    .fl h3{margin:10px 0 4px}
+    .already{text-align:left}
   }
 </style>
 </head>
@@ -309,7 +323,7 @@
           <div class="pic">
             <svg viewBox="0 0 240 150" role="img" aria-label="字幕と描き込みが入った添削動画のイメージ"><rect x="8" y="8" width="224" height="134" rx="10" fill="#0B1B33"/><path d="M8 100 L232 86 L232 142 L8 142Z" fill="#1A56B8"/><circle cx="110" cy="44" r="9" fill="#081733"/><path d="M102 56 L120 56 L124 100 L100 100Z" fill="#081733"/><path d="M104 100 L94 130 M118 100 L130 128" stroke="#081733" stroke-width="7" stroke-linecap="round"/><path d="M120 62 L146 74 L164 62" stroke="#FF9F43" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M60 40 Q80 24 98 46" stroke="#FFE14D" stroke-width="3" fill="none"/><rect x="40" y="110" width="160" height="22" rx="6" fill="#061229" opacity=".85"/><circle cx="54" cy="121" r="7" fill="#FF8A7A"/><rect x="68" y="117" width="110" height="8" rx="4" fill="#FFFFFF"/><circle cx="214" cy="26" r="11" fill="#D4F03A"/><path d="M211 21 L219 26 L211 31Z" fill="#0A2350"/></svg>
           </div>
-          <div class="txt"><span class="when">毎回</span><h3>添削動画</h3><p>コーチのコメントが字幕で入り、矢印や角度の描き込み、AIの骨格線も入った動画。スマホで何度でも見返せます。</p></div>
+          <div class="txt"><span class="when">毎回</span><h3>添削動画</h3><p>コーチのコメントが字幕で入り、矢印や角度の描き込み、AIの骨格線やスイング軌道も入った動画。スマホで何度でも見返せます。</p></div>
         </div>
         <div class="dv">
           <div class="pic">
@@ -329,8 +343,9 @@
         <div>
           <span class="eyebrow">AI ANALYSIS</span>
           <h3>コーチの目に、AIの「数字」をプラス。</h3>
-          <p>動画からAIが関節の位置を読み取り、フォームを角度で分析します。お手本の骨格と重ねて、違いを見比べることもできます。</p>
+          <p>動画からAIが関節の位置を読み取り、フォームを角度で分析します。ラケットと手首の通り道も「スイング軌道」として線で描き出すので、振り遅れや軌道のズレがひと目でわかります。</p>
           <ul>
+            <li class="hl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 18c3-9 9-13 18-11"/><circle cx="21" cy="7" r="1.6" fill="currentColor"/></svg>スイング軌道を線で表示<em>NEW</em></li>
             <li>利き腕のひじの角度</li>
             <li>脇の開き</li>
             <li>ひざの曲がり</li>
@@ -340,9 +355,14 @@
           </ul>
           <p class="note">※数値はAIによる推定値です。毎回同じアングルで撮影すると、変化を正確に比べられます。</p>
         </div>
-        <svg viewBox="0 0 360 300" role="img" aria-label="受講者の骨格にお手本の骨格を点線で重ねて比較したイメージ">
+        <svg viewBox="0 0 360 300" role="img" aria-label="受講者の骨格にお手本の骨格を点線で重ね、ラケットと手首のスイング軌道を線で表示したイメージ">
+          <defs><linearGradient id="trailG" gradientUnits="userSpaceOnUse" x1="40" y1="0" x2="320" y2="0"><stop offset="0" stop-color="#3CC88C"/><stop offset=".45" stop-color="#D4F03A"/><stop offset=".75" stop-color="#FFBE3C"/><stop offset="1" stop-color="#FF6E32"/></linearGradient></defs>
           <rect x="0" y="0" width="360" height="300" rx="20" fill="#0B1B33"/>
           <path d="M0 220 L360 196 L360 300 L0 300Z" fill="#123A7A"/>
+          <path d="M70 120 C40 200 120 236 200 214 C268 196 312 160 312 112 C312 70 276 46 238 52" stroke="#0A2350" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M70 120 C40 200 120 236 200 214 C268 196 312 160 312 112 C312 70 276 46 238 52" stroke="url(#trailG)" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M112 128 C100 176 150 186 206 158 C238 142 252 118 236 96" stroke="#0A2350" stroke-width="7" fill="none" stroke-linecap="round"/>
+          <path d="M112 128 C100 176 150 186 206 158 C238 142 252 118 236 96" stroke="#4FD1FF" stroke-width="4" fill="none" stroke-linecap="round"/>
           <g stroke="#4FD1FF" stroke-width="3" stroke-dasharray="7 6" fill="none" stroke-linecap="round">
             <path d="M150 92 L182 92 L232 118 L270 104"/><path d="M150 92 L120 132 L112 170"/><path d="M150 92 L156 176 L186 176 L182 92"/><path d="M156 176 L138 236 L124 280"/><path d="M186 176 L214 236 L236 280"/>
           </g>
@@ -354,7 +374,8 @@
           <circle cx="222" cy="132" r="7" fill="#FF9F43"/><circle cx="258" cy="126" r="6" fill="#FF9F43"/>
           <rect x="200" y="148" width="72" height="30" rx="8" fill="#061229" opacity=".9"/>
           <text x="236" y="170" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-weight="700" font-size="22" fill="#FF9F43">132°</text>
-          <rect x="20" y="20" width="132" height="54" rx="10" fill="#061229" opacity=".85"/>
+          <rect x="20" y="20" width="132" height="76" rx="10" fill="#061229" opacity=".85"/>
+          <path d="M34 82 H58" stroke="url(#trailG)" stroke-width="5" stroke-linecap="round"/><text x="66" y="87" font-size="13" fill="#EAF1FB" font-family="Noto Sans JP, sans-serif">スイング軌道</text>
           <path d="M34 38 H58" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/><text x="66" y="43" font-size="13" fill="#EAF1FB" font-family="Noto Sans JP, sans-serif">あなた</text>
           <path d="M34 60 H58" stroke="#4FD1FF" stroke-width="3" stroke-dasharray="6 5" stroke-linecap="round"/><text x="66" y="65" font-size="13" fill="#EAF1FB" font-family="Noto Sans JP, sans-serif">お手本</text>
         </svg>
@@ -395,7 +416,7 @@
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>AIによるフォームの数値分析</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>添削動画・添削シートのお届け</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>成長カルテ付き（毎回更新）</li>
-            <li style="background:#F1F9C9;border-radius:10px;padding:8px 12px;font-weight:700"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z"/></svg>初回アンケートに全部答えると<span class="js-discount">1,000</span>円引き</li>
+            <li class="disc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z"/></svg><span><b><span class="js-discount">1,000</span>円引き</b><small>初回アンケートに全部答えると</small></span></li>
           </ul>
           <a class="btn btn-main js-pay" href="#price">申込フォームへ進む <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </div>
