@@ -16,7 +16,7 @@
     PRICE: '0,000',                                          // 1回の料金（数字のみ・税込）
     DAYS: 7,                                                    // 返信までの日数
     CONTACT: 'info@example.com',                                // お問い合わせ先
-    SAMPLE_YOUTUBE_ID: 'sjhLt9I1LhI',                                    // サンプル動画（YouTubeの動画ID。空なら非表示）例：'dQw4w9WgXcQ'
+    SAMPLE_VIDEO: 'videos/sample.mp4',                                   // サンプル動画（このフォルダ内の動画。空なら非表示）
   };
 </script>
 <style>
@@ -106,7 +106,7 @@
 
   /* sample video */
   .video-frame{position:relative;aspect-ratio:16/9;border-radius:22px;overflow:hidden;background:var(--green);box-shadow:0 20px 50px rgba(20,37,27,.18)}
-  .video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .video-frame iframe,.video-frame video{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000;object-fit:contain}
 
   /* coach */
   .coach{display:grid;grid-template-columns:260px 1fr;gap:36px;background:#fff;border:1px solid var(--line);border-radius:24px;padding:36px;align-items:center}
@@ -288,13 +288,13 @@
     </div>
   </section>
 
-  <!-- SAMPLE VIDEO（設定でYouTubeの動画IDを入れると表示） -->
+  <!-- SAMPLE VIDEO（設定の SAMPLE_VIDEO に動画ファイルを入れると表示） -->
   <section id="sample" class="bg-white" hidden>
     <div class="wrap">
       <span class="eyebrow">SAMPLE</span>
       <h2>実際の添削動画</h2>
       <p class="lead">受講者のスイングに、コーチのコメントとAIの分析を入れた添削動画の例です。</p>
-      <div class="video-frame"><iframe id="sampleFrame" title="添削動画のサンプル" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>
+      <div class="video-frame"><video id="sampleVideo" controls playsinline preload="metadata" poster="images/sample-poster.jpg" aria-label="添削動画のサンプル"></video></div>
     </div>
   </section>
 
@@ -502,8 +502,8 @@
     each('.js-form', function (a) { if (C.FORM_URL) { a.href = C.FORM_URL; a.target = '_blank'; a.rel = 'noopener'; } });
     each('.js-price', function (el) { if (C.PRICE) el.textContent = C.PRICE; });
     each('.js-days', function (el) { if (C.DAYS) el.textContent = C.DAYS; });
-    if (C.SAMPLE_YOUTUBE_ID) {
-      document.getElementById('sampleFrame').src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(C.SAMPLE_YOUTUBE_ID) + '?rel=0&playsinline=1';
+    if (C.SAMPLE_VIDEO) {
+      document.getElementById('sampleVideo').src = C.SAMPLE_VIDEO;
       document.getElementById('sample').hidden = false;
     }
     each('.js-contact', function (a) { if (C.CONTACT) { a.href = 'mailto:' + C.CONTACT; a.textContent = C.CONTACT; } });
